@@ -5,19 +5,25 @@ import DataTable from "./DataTable";
 import { IncidentsFilters } from "./IncidentsFilters";
 
 const formatDate = (d) => {
+  //validamos 
   if (!d) return "-";
-  try { return new Date(d).toLocaleDateString(); } catch { return d; }
+  try {
+    //transformamos a fecha legible, si no es una fecha válida, devolvemos el valor original.
+    return new Date(d).toLocaleDateString();
+  } catch {
+    return d;
+  }
 };
+
+//Definicion de colores 
 const priorityColors = {
   low: "bg-green-100 text-green-700",
   medium: "bg-yellow-100 text-yellow-700",
   high: "bg-orange-100 text-orange-700",
-  critical: "bg-red-100 text-red-700",
 };
 
 const statusColors = {
   open: "bg-blue-100 text-blue-700",
-  in_progress: "bg-purple-100 text-purple-700",
   resolved: "bg-green-100 text-green-700",
   closed: "bg-gray-100 text-gray-700",
 };
@@ -34,33 +40,62 @@ const Badge = ({ value, colors }) => (
 const columns = [
   { key: "sequenceId", label: "#" },
   { key: "title", label: "Título" },
-  { key: "priority", label: "Prioridad", render: (row) => <Badge value={row.priority} colors={priorityColors} /> },
-  { key: "status", label: "Estado", render: (row) => <Badge value={row.status} colors={statusColors} /> },
-  { key: "project", label: "Proyecto", render: (row) => row.project?.name ?? "-" },
-  { key: "owner", label: "Responsable", render: (row) => row.owner?.name ?? "-" },
-  { key: "createdAt", label: "Creado", render: (row) => formatDate(row.createdAt) },
+  {
+    key: "priority",
+    label: "Prioridad",
+    render: (row) => <Badge value={row.priority} colors={priorityColors} />,
+  },
+  {
+    key: "status",
+    label: "Estado",
+    render: (row) => <Badge value={row.status} colors={statusColors} />,
+  },
+  {
+    key: "project",
+    label: "Proyecto",
+    render: (row) => row.project?.name ?? "-",
+  },
+  {
+    key: "owner",
+    label: "Responsable",
+    render: (row) => row.owner?.name ?? "-",
+  },
+  {
+    key: "createdAt",
+    label: "Creado",
+    render: (row) => formatDate(row.createdAt),
+  },
 ];
 
 export default function IncidentsTable() {
   const context = useIncidentContext();
   const incidents = useMemo(() => {
-  const raw = context?.value ?? [];
-  return Array.isArray(raw) && raw.length && Array.isArray(raw[0]) ? raw.flat() : raw;
-}, [context]);
-
-  const [filters, setFilters] = useState({ status: "", project: "", priority: "", owner: "", dateRange: "" });
-
+    const raw = context?.value ?? [];
+    return Array.isArray(raw) && raw.length && Array.isArray(raw[0])
+      ? raw.flat()
+      : raw;
+  }, [context]);
+  //iniciamos con filtros por defecto para mostrar solo incidencias abiertas de alta prioridad, para facilitar la identificación de problemas críticos sin necesidad de configurar filtros inicialmente
+  const [filters, setFilters] = useState({
+    status: "open",
+    project: "",
+    priority: "high",
+    owner: "",
+    dateRange: "",
+  });
+  // Al cargar el componente, intentamos recuperar los filtros guardados en localStorage para mantener la persistencia de la experiencia del usuario entre sesiones. Si no hay filtros guardados, se mantienen los valores por defecto.
   useEffect(() => {
     const saved = window.localStorage.getItem("spybee-incident-filters");
     if (!saved) return;
 
     try {
+      // Validamos que el contenido sea un JSON válido antes de intentar parsearlo
       const parsed = JSON.parse(saved);
       if (parsed && typeof parsed === "object") {
         setFilters({
-          status: parsed.status || "",
+          status: parsed.status || "open",
           project: parsed.project || "",
-          priority: parsed.priority || "",
+          priority: parsed.priority || "high",
           owner: parsed.owner || "",
           dateRange: parsed.dateRange || "",
         });
@@ -71,32 +106,57 @@ export default function IncidentsTable() {
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem("spybee-incident-filters", JSON.stringify(filters));
+    //guardamos solo filtros, así evitamos guardar datos de la tabla por error
+    window.localStorage.setItem(
+      "spybee-incident-filters",
+      JSON.stringify(filters),
+    );
   }, [filters]);
 
   const options = useMemo(() => {
-    const statuses = Array.from(new Set(incidents.map((item) => item.status).filter(Boolean))).sort();
-    const priorities = Array.from(new Set(incidents.map((item) => item.priority).filter(Boolean))).sort();
-    const projects = Array.from(new Set(incidents.map((item) => item.project?.name).filter(Boolean))).sort();
-    const owners = Array.from(new Set(incidents.map((item) => item.owner?.name).filter(Boolean))).sort();
-
-    return { statuses, priorities, projects, owners, dateRanges: [
-      { value: "", label: "Todos" },
-      { value: "7", label: "Últimos 7 días" },
-      { value: "30", label: "Últimos 30 días" },
-      { value: "90", label: "Últimos 90 días" },
-    ] };
-  }, [incidents]);
-
+    // Extrae y ordena las opciones únicas para cada filtro
+    //En supabase podríamos hacer esto con consultas específicas para cada campo, asi si agregamos un registro nuevo con un valor diferente, automáticamente aparecerá en los filtros sin necesidad de actualizar el código.
+    const statuses = Array.from(
+      new Set(incidents.map((item) => item.status).filter(Boolean)),
+    ).sort();
+    const priorities = Array.from(
+      new Set(incidents.map((item) => item.priority).filter(Boolean)),
+    ).sort();
+    const projects = Array.from(
+      new Set(incidents.map((item) => item.project?.name).filter(Boolean)),
+    ).sort();
+    const owners = Array.from(
+      new Set(incidents.map((item) => item.owner?.name).filter(Boolean)),
+    ).sort();
+    //Como no tenemos un campo específico de fecha, usamos rangos predefinidos para filtrar por fecha de creación. Haria lo mismo con o sin supabase, ya que es una lógica de filtrado común en el cliente.
+    return {
+      statuses,
+      priorities,
+      projects,
+      owners,
+      dateRanges: [
+        { value: "", label: "Todos" },
+        { value: "7", label: "Últimos 7 días" },
+        { value: "30", label: "Últimos 30 días" },
+        { value: "90", label: "Últimos 90 días" },
+      ],
+    };
+  }, []); 
+ // El filtro en el cliente ya que no tenemos una API. En caso de tener muchos registros usaria un filtrado en el servidor.
   const filteredIncidents = useMemo(
     () =>
       incidents.filter((incident) => {
         if (filters.status && incident.status !== filters.status) return false;
-        if (filters.project && incident.project?.name !== filters.project) return false;
-        if (filters.priority && incident.priority !== filters.priority) return false;
-        if (filters.owner && incident.owner?.name !== filters.owner) return false;
+        if (filters.project && incident.project?.name !== filters.project)
+          return false;
+        if (filters.priority && incident.priority !== filters.priority)
+          return false;
+        if (filters.owner && incident.owner?.name !== filters.owner)
+          return false;
         if (filters.dateRange) {
-          const createdAt = incident.createdAt ? new Date(incident.createdAt) : null;
+          const createdAt = incident.createdAt
+            ? new Date(incident.createdAt)
+            : null;
           if (!createdAt || Number.isNaN(createdAt.getTime())) return false;
 
           const days = Number(filters.dateRange);
@@ -108,12 +168,16 @@ export default function IncidentsTable() {
         }
         return true;
       }),
-    [incidents, filters]
+    [incidents, filters],
   );
 
   return (
     <div>
-      <IncidentsFilters filters={filters} options={options} onChange={setFilters} />
+      <IncidentsFilters
+        filters={filters}
+        options={options}
+        onChange={setFilters}
+      />
       <div className="rounded-lg bg-white p-4 shadow-sm">
         <div className="mb-4 text-sm text-gray-600">
           {filteredIncidents.length === 0
