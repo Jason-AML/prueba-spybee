@@ -1,10 +1,8 @@
-import { DashboardLayout } from "@/app/components/layouts/DashboardLayout";
+import DashboardMap from "../components/DashboardMap";
 import IncidentsTable from "../components/IncidentsTable";
-
 const DashboardPage = () => {
-  
-  return (
-    <DashboardLayout pageTitle="Dashboard">
+  return (<>
+    
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Cards de estadísticas */}
         <StatCard
@@ -29,7 +27,8 @@ const DashboardPage = () => {
         </p>
         <IncidentsTable />
       </div>
-    </DashboardLayout>
+      <DashboardMap/>
+   </>
   );
 };
 

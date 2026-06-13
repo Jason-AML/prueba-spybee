@@ -57,9 +57,9 @@ export default function IncidentsTable() {
     try {
       const parsed = JSON.parse(saved);
       if (parsed && typeof parsed === "object") {
-        setFilters({
+        setFilters({                      //en caso que el parsed no tenga los campos, enviamos un string vacio para evitar null
           status: parsed.status || "",
-          project: parsed.project || "",
+          project: parsed.project || "",  
           priority: parsed.priority || "",
           owner: parsed.owner || "",
           dateRange: parsed.dateRange || "",
@@ -71,7 +71,11 @@ export default function IncidentsTable() {
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem("spybee-incident-filters", JSON.stringify(filters));
+    //guardamos solo filtros, así evitamos guardar datos de la tabla ya filtrada
+    window.localStorage.setItem(
+      "spybee-incident-filters",
+      JSON.stringify(filters),
+    );
   }, [filters]);
 
   const options = useMemo(() => {
