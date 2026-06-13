@@ -4,7 +4,7 @@ import {incidents} from "../data/incidents.mock.js";
 const IncidentContext = createContext(null);
 
 export function IncidentProvider({ children }) {
-  const [value, setValue] = useState(incidents);
+  const [value, setValue] = useState(incidents.flat(Infinity));
   if (!value) {
     return null; // o un indicador de carga
   }
