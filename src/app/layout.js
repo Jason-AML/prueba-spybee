@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { IncidentProvider } from "../context/incidentsContext";
+import { Layout } from "./components/layouts/Layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +25,9 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <IncidentProvider>{children}</IncidentProvider>
+        <IncidentProvider>
+          <Layout pageTitle="Dashboard">{children}</Layout>
+        </IncidentProvider>
       </body>
     </html>
   );
