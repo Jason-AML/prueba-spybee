@@ -1,14 +1,14 @@
-import React from 'react'
+import React from "react";
+import IncidentView from "../../incidents/components/IncidentView";
+import { incidents } from "../../../data/incidents.mock";
 
-const page = async({params}) => {
-    const { id } =await  params;
-     
-  return (
-    <div>
-      <h1>Incident Details</h1>
-      <p>Incident ID: {id}</p>
-    </div>
-  )
-}
+const page = async ({ params }) => {
+  const { id } = await params;
+  
+  // Buscar el incidente en los datos mock
+  const incidentData = incidents[0]?.find((incident) => incident.id === id);
 
-export default page
+  return <IncidentView incident={incidentData} />;
+};
+
+export default page;

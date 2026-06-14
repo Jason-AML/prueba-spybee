@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { Sidebar } from "../ui/Sidebar";
 import { Header } from "../ui/Header";
-
-export const DashboardLayout = ({ children, pageTitle = "Dashboard" }) => {
+import {useNavigation} from "@/app/hooks/useNavigation";
+export const Layout = ({ children, pageTitle = "Dashboard" }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
+ const { getCurrentItem } = useNavigation();
+ const currentItem = getCurrentItem();
   useEffect(() => {
     const body = document.body;
     const mediaQuery = window.matchMedia("(max-width: 767px)");
@@ -50,9 +51,9 @@ export const DashboardLayout = ({ children, pageTitle = "Dashboard" }) => {
         {/* Contenedor principal */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
-          <Header title={pageTitle} onMenuToggle={handleMenuToggle} />
+          <Header title={currentItem?.label ?? "Dashboard"} onMenuToggle={handleMenuToggle} />
           {/* Contenido principal */}
-          <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
+          <main className="flex-1 overflow-y-auto p-3 bg-gray-50">
             <div className="max-w-7xl mx-auto">{children}</div>
           </main>
         </div>
