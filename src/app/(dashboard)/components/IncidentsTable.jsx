@@ -5,7 +5,7 @@ import DataTable from "./DataTable";
 import { IncidentsFilters } from "./IncidentsFilters";
 
 const formatDate = (d) => {
-  //validamos 
+  //validamos
   if (!d) return "-";
   try {
     //transformamos a fecha legible, si no es una fecha válida, devolvemos el valor original.
@@ -15,7 +15,7 @@ const formatDate = (d) => {
   }
 };
 
-//Definicion de colores 
+//Definicion de colores
 const priorityColors = {
   low: "bg-green-100 text-green-700",
   medium: "bg-yellow-100 text-yellow-700",
@@ -68,13 +68,14 @@ const columns = [
 ];
 
 export default function IncidentsTable() {
-  const context = useIncidentContext();
+  const { value, filteredValue, setFilteredValue } = useIncidentContext();
   const incidents = useMemo(() => {
-    const raw = context?.value ?? [];
+    const raw = value ?? [];
     return Array.isArray(raw) && raw.length && Array.isArray(raw[0])
       ? raw.flat()
       : raw;
-  }, [context]);
+  }, [value]);
+
   //iniciamos con filtros por defecto para mostrar solo incidencias abiertas de alta prioridad, para facilitar la identificación de problemas críticos sin necesidad de configurar filtros inicialmente
   const [filters, setFilters] = useState({
     status: "open",
@@ -92,9 +93,10 @@ export default function IncidentsTable() {
       // Validamos que el contenido sea un JSON válido antes de intentar parsearlo
       const parsed = JSON.parse(saved);
       if (parsed && typeof parsed === "object") {
-        setFilters({                      //en caso que el parsed no tenga los campos, enviamos un string vacio para evitar null
+        setFilters({
+          //en caso que el parsed no tenga los campos, enviamos un string vacio para evitar null
           status: parsed.status || "",
-          project: parsed.project || "",  
+          project: parsed.project || "",
           priority: parsed.priority || "",
           owner: parsed.owner || "",
           dateRange: parsed.dateRange || "",
@@ -141,8 +143,8 @@ export default function IncidentsTable() {
         { value: "90", label: "Últimos 90 días" },
       ],
     };
-  }, []); 
- // El filtro en el cliente ya que no tenemos una API. En caso de tener muchos registros usaria un filtrado en el servidor.
+  }, []);
+  // El filtro en el cliente ya que no tenemos una API. En caso de tener muchos registros usaria un filtrado en el servidor.
   const filteredIncidents = useMemo(
     () =>
       incidents.filter((incident) => {
@@ -170,7 +172,9 @@ export default function IncidentsTable() {
       }),
     [incidents, filters],
   );
-
+  useEffect(() => {
+    setFilteredValue(filteredIncidents);
+  }, [filteredIncidents]);
   return (
     <div>
       <IncidentsFilters
