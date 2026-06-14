@@ -1,0 +1,440 @@
+.incidentView {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 1.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .incidentView {
+    padding: 2rem 1.5rem;
+  }
+}
+
+.contentWrapper {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.headerCard,
+.sectionCard,
+.teamCard,
+.timelineCard,
+.mediaCard,
+.tagsCard,
+.relatedCard,
+.mapCard {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 20px 30px rgba(15, 23, 42, 0.08);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.headerCard {
+  padding: 2rem;
+}
+
+.headerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.headerInfo {
+  flex: 1;
+  min-width: 18rem;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.metaTag,
+.idTag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 0.75rem;
+  line-height: 1.05;
+}
+
+.description {
+  margin-top: 0.75rem;
+  color: #475569;
+  line-height: 1.75;
+}
+
+.statusOpen {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.statusInProgress {
+  background: #fef9c3;
+  color: #d97706;
+}
+
+.statusClosed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.statusOnHold {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.priorityLow {
+  background: #d1fae5;
+  color: #166534;
+}
+
+.priorityMedium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.priorityHigh {
+  background: #fed7aa;
+  color: #b45309;
+}
+
+.priorityCritical {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.approvalBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  background: #ecfdf5;
+  border: 1px solid #d1fae5;
+  border-radius: 9999px;
+  padding: 0.5rem 0.75rem;
+  color: #166534;
+  font-weight: 700;
+}
+
+.mainGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .mainGrid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.leftColumn,
+.rightColumn {
+  width: 100%;
+}
+
+.sectionCard h2,
+.teamCard h2,
+.timelineCard h2,
+.tagsCard h2,
+.relatedCard h2,
+.mapCard h2 {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .fieldGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.fieldItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fieldLabel {
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.fieldValue {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.sectionHeading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.subSection {
+  margin-bottom: 1.5rem;
+}
+
+.subTitle {
+  display: block;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.personCard {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.personInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar {
+  border-radius: 9999px;
+}
+
+.personMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.personName {
+  font-weight: 700;
+  color: #111827;
+}
+
+.personDetail {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.actionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.actionButton,
+.viewLink,
+.tagChip {
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.actionButton {
+  padding: 0.5rem 0.75rem;
+}
+
+.connectButton {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.connectButton:hover {
+  background: #bfdbfe;
+}
+
+.reassignButton {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.reassignButton:hover {
+  background: #fed7aa;
+}
+
+.icon {
+  font-family: "Material Symbols Outlined", sans-serif;
+}
+
+.emptyStateCard {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.emptyStateTitle {
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.emptyStateText {
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.assignButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  background: #fde68a;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+  border-radius: 9999px;
+  font-weight: 700;
+}
+
+.assignButton:hover {
+  transform: scale(1.02);
+}
+
+.personList {
+  display: grid;
+  gap: 1rem;
+}
+
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .mediaGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.mediaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.mediaThumb {
+  background: #f3f4f6;
+  border-radius: 0.75rem;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mediaImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mediaTitle {
+  color: #334155;
+  font-size: 0.95rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mediaSize {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.timelineList {
+  display: grid;
+  gap: 1rem;
+}
+
+.timelineItem {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.timelineLabel,
+.metaLabel {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.timelineValue,
+.value {
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.tagList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tagChip {
+  padding: 0.5rem 0.75rem;
+  border-radius: 9999px;
+  background: var(--tag-bg, #f1f5f9);
+  color: var(--tag-color, #334155);
+  border: 1px solid var(--tag-border, #cbd5e1);
+}
+
+.notFoundCard {
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 15px 25px rgba(15, 23, 42, 0.08);
+  text-align: center;
+}
+
+.notFoundText {
+  color: #6b7280;
+  font-size: 1rem;
+}

@@ -2,6 +2,7 @@ import DashboardMap from "../components/DashboardMap";
 import IncidentsTable from "../components/IncidentsTable";
 import { redirect } from "next/navigation";
 import { getUser } from "@/services/auth/auth.server";
+import styles from "./DashboardPage.module.scss";
 
 const DashboardPage = async () => {
   const user = await getUser();
@@ -9,7 +10,7 @@ const DashboardPage = async () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className={styles.dashboardGrid}>
         {/* Cards de estadísticas */}
         <StatCard
           title="Usuarios Activos"
@@ -23,11 +24,9 @@ const DashboardPage = async () => {
       </div>
       <DashboardMap />
       {/* Sección de bienvenida */}
-      <div className="mt-8 bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Historial de Incidencias
-        </h2>
-        <p className="text-gray-600">
+      <div className={styles.sectionCard}>
+        <h2 className={styles.sectionTitle}>Historial de Incidencias</h2>
+        <p className={styles.sectionText}>
           Puedes filtrar las incidencias por prioridad, estado, proyecto o
           responsable para encontrar rápidamente lo que buscas.
         </p>
@@ -41,18 +40,20 @@ const StatCard = ({ title, value, icon, trend }) => {
   const isPositive = !trend.startsWith("-");
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
-      <div className="flex items-start justify-between">
+    <div className={styles.statCard}>
+      <div className={styles.statCardHeader}>
         <div>
-          <p className="text-gray-600 text-sm font-medium">{title}</p>
-          <p className="text-3xl font-bold text-gray-800 mt-2">{value}</p>
+          <p className={styles.statTitle}>{title}</p>
+          <p className={styles.statValue}>{value}</p>
           <p
-            className={`text-sm mt-2 ${isPositive ? "text-green-600" : "text-red-600"}`}
+            className={`${styles.statTrend} ${
+              isPositive ? styles.statTrendPositive : styles.statTrendNegative
+            }`}
           >
             {trend} desde el mes pasado
           </p>
         </div>
-        <span className="text-4xl">{icon}</span>
+        <span className={styles.statIcon}>{icon}</span>
       </div>
     </div>
   );

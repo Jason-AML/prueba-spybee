@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerService, signIn } from "@/services/auth/auth";
+import styles from "./Form.module.scss";
 
 const Form = ({ mode = "login" }) => {
   const isLogin = mode === "login";
@@ -13,36 +14,32 @@ const Form = ({ mode = "login" }) => {
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError(null);
-  try {
-    if (isLogin) {
-      await signIn(email, password);
-      router.push("/dashboard");
-    } else {
-      // Verificar si el correo ya está registrado
-      const data = await registerService(email, password);
-      if (data?.user?.identities?.length === 0) {
-        setError("Este correo ya está registrado");
-        return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      if (isLogin) {
+        await signIn(email, password);
+        router.push("/dashboard");
+      } else {
+        const data = await registerService(email, password);
+        if (data?.user?.identities?.length === 0) {
+          setError("Este correo ya está registrado");
+          return;
+        }
+        router.push("/login");
       }
-      router.push("/login");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full md:w-1/2 bg-white px-8 py-10 flex flex-col justify-center"
-    >
-      <div className="flex justify-center mb-10">
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.logoContainer}>
         <Image
           src="/logo_spybee.webp"
           alt="Logo Spybee"
@@ -51,25 +48,22 @@ const Form = ({ mode = "login" }) => {
         />
       </div>
 
-      <h2 className="text-xl font-bold text-[#091426] mb-1">
+      <h2 className={styles.title}>
         {isLogin ? "Iniciar sesión" : "Crear cuenta"}
       </h2>
-      <p className="text-sm text-gray-500 mb-6">
+      <p className={styles.subtitle}>
         {isLogin
           ? "Ingresa a tu cuenta para continuar"
           : "Crea tu cuenta para empezar"}
       </p>
 
       {/* Email */}
-      <label
-        htmlFor="email"
-        className="font-mono text-[11px] text-gray-500 uppercase tracking-widest mb-1.5 block"
-      >
+      <label htmlFor="email" className={styles.fieldLabel}>
         Correo electrónico
       </label>
-      <div className="relative mb-4">
+      <div className={styles.inputGroup}>
         <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"
+          className={styles.icon}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -85,20 +79,17 @@ const Form = ({ mode = "login" }) => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="nombre@constructora.com"
           autoComplete="email"
-          className="w-full h-11 pl-10 pr-4 bg-[#f7f9fb] border border-gray-200 rounded-md text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 focus:bg-white transition-all"
+          className={styles.input}
         />
       </div>
 
       {/* Password */}
-      <label
-        htmlFor="password"
-        className="font-mono text-[11px] text-gray-500 uppercase tracking-widest mb-1.5 block"
-      >
+      <label htmlFor="password" className={styles.fieldLabel}>
         Contraseña
       </label>
-      <div className="relative mb-2">
+      <div className={styles.passwordWrapper}>
         <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"
+          className={styles.icon}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -114,19 +105,17 @@ const Form = ({ mode = "login" }) => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
           autoComplete="current-password"
-          className="w-full h-11 pl-10 pr-11 bg-[#f7f9fb] border border-gray-200 rounded-md text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 focus:bg-white transition-all"
+          className={styles.input}
         />
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          aria-label={
-            showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
-          }
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+          aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+          className={styles.toggleButton}
         >
           {showPassword ? (
             <svg
-              className="w-4 h-4"
+              className={styles.buttonIcon}
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -138,7 +127,7 @@ const Form = ({ mode = "login" }) => {
             </svg>
           ) : (
             <svg
-              className="w-4 h-4"
+              className={styles.buttonIcon}
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -151,31 +140,25 @@ const Form = ({ mode = "login" }) => {
         </button>
       </div>
 
-      {/* Links */}
-      <div className="flex justify-between font-mono text-[11px] text-amber-700 mb-5">
-        <a href={isLogin ? "/register" : "/login"} className="hover:underline">
+      <div className={styles.linkRow}>
+        <a href={isLogin ? "/register" : "/login"} className={styles.link}>
           {isLogin
             ? "¿No tienes cuenta? Regístrate"
             : "¿Ya tienes cuenta? Inicia sesión"}
         </a>
         {isLogin && (
-          <a href="#" className="hover:underline">
+          <a href="#" className={styles.link}>
             ¿Olvidaste tu contraseña?
           </a>
         )}
       </div>
 
-      {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
 
-      {/* Submit */}
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full cursor-pointer h-11 bg-[#fcd34d] hover:bg-[#fbbf24] disabled:opacity-60 text-[#091426] font-bold rounded-md font-mono text-xs tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] mb-4"
-      >
+      <button type="submit" disabled={loading} className={styles.submitButton}>
         {loading ? "Cargando..." : isLogin ? "Iniciar sesión" : "Registrarse"}
         <svg
-          className="w-4 h-4"
+          className={styles.buttonIcon}
           fill="none"
           stroke="currentColor"
           strokeWidth="2.5"

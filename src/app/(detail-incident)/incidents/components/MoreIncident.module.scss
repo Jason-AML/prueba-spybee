@@ -1,0 +1,99 @@
+.relatedCard {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 20px 30px rgba(15, 23, 42, 0.08);
+  padding: 1.5rem;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.emptyText {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.relatedList {
+  display: grid;
+  gap: 1rem;
+}
+
+.incidentItem {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.relatedHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.incidentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  color: #64748b;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.incidentTitle {
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.statusBadge {
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.metaGroup {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .metaGroup {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.value {
+  color: #111827;
+  font-weight: 700;
+  margin: 0.25rem 0 0;
+}
+
+.viewLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 9999px;
+  background: #fcd34d;
+  color: #111827;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.viewLink:hover {
+  background: #fbbf24;
+}
