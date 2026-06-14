@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
-import React from "react";
 import Form from "../../components/auth/Form";
-const page = () => {
+import useRedirectAuth from "@/app/hooks/useRedirectAuth";
+const Page = () => {
+  useRedirectAuth();
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#091426] p-0">
       <div className="flex w-full max-w-7xl min-h-[90vh] overflow-hidden shadow-2xl rounded-2xl">
@@ -34,4 +35,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

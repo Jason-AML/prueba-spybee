@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
-import { Layout } from '@/app/components/layouts/Layout'
 import { ProtectedRouteWrapper } from '@/app/components/ProtectedRouteWrapper'
 import { getUser } from '@/services/auth/auth.server';
+
+export const metadata = {
+  title: "Detalle de Incidente - Spybee",
+};
 
 const layout = async ({ children }) => {
   const user = await getUser();
@@ -9,7 +12,7 @@ const layout = async ({ children }) => {
 
   return (
     <ProtectedRouteWrapper>
-      <Layout pageTitle="Hola">{children}</Layout>
+      {children}
     </ProtectedRouteWrapper>
   );
 };

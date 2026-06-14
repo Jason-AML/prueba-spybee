@@ -1,6 +1,12 @@
 import DashboardMap from "../components/DashboardMap";
 import IncidentsTable from "../components/IncidentsTable";
-const DashboardPage = () => {
+import { redirect } from "next/navigation";
+import { getUser } from "@/services/auth/auth.server";
+
+const DashboardPage = async () => {
+  const user = await getUser();
+  if (!user) redirect("/login");
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
