@@ -49,7 +49,7 @@ const Form = ({ mode = "login" }) => {
       </p>
 
       {/* Email */}
-      <label className="font-mono text-[11px] text-gray-500 uppercase tracking-widest mb-1.5 block">
+      <label htmlFor="email" className="font-mono text-[11px] text-gray-500 uppercase tracking-widest mb-1.5 block">
         Correo electrónico
       </label>
       <div className="relative mb-4">
@@ -58,6 +58,7 @@ const Form = ({ mode = "login" }) => {
           <polyline points="22,6 12,13 2,6" />
         </svg>
         <input
+          id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -68,7 +69,7 @@ const Form = ({ mode = "login" }) => {
       </div>
 
       {/* Password */}
-      <label className="font-mono text-[11px] text-gray-500 uppercase tracking-widest mb-1.5 block">
+      <label htmlFor="password" className="font-mono text-[11px] text-gray-500 uppercase tracking-widest mb-1.5 block">
         Contraseña
       </label>
       <div className="relative mb-2">
@@ -77,6 +78,7 @@ const Form = ({ mode = "login" }) => {
           <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
         <input
+          id="password"
           type={showPassword ? "text" : "password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
