@@ -50,7 +50,7 @@ const IncidentMap = ({ incident, incidents }) => {
       <h2 className="text-xl font-bold text-gray-900 mb-4">Ubicación</h2>
       <div
         ref={mapContainer}
-        className="w-full h-80 rounded-lg overflow-hidden mb-4"
+        className="w-full h-120 rounded-lg overflow-hidden mb-4"
       />
       {items.length === 1 && items[0].coordinates && (
         <div className="grid grid-cols-2 gap-4">
