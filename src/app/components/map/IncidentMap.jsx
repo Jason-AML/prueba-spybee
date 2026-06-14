@@ -46,7 +46,7 @@ const IncidentMap = ({ incident, incidents }) => {
   }, [incident, incidents]);
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 mb-6">
+    <div className="bg-white rounded-lg shadow p-6 mb-6 mt-5">
       <h2 className="text-xl font-bold text-gray-900 mb-4">Ubicación</h2>
       <div
         ref={mapContainer}
