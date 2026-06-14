@@ -12,8 +12,8 @@ export const IncidentsFilters = ({ filters, options, onChange }) => {
 
   return (
     <div className="m-6 rounded-lg bg-white p-4 shadow-sm">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-5">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-5">
           <label className="block">
             <span className="text-sm font-medium text-gray-700">Estado</span>
             <select

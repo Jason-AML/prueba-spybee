@@ -92,10 +92,10 @@ export default function IncidentsTable() {
       // Validamos que el contenido sea un JSON válido antes de intentar parsearlo
       const parsed = JSON.parse(saved);
       if (parsed && typeof parsed === "object") {
-        setFilters({
-          status: parsed.status || "open",
-          project: parsed.project || "",
-          priority: parsed.priority || "high",
+        setFilters({                      //en caso que el parsed no tenga los campos, enviamos un string vacio para evitar null
+          status: parsed.status || "",
+          project: parsed.project || "",  
+          priority: parsed.priority || "",
           owner: parsed.owner || "",
           dateRange: parsed.dateRange || "",
         });
@@ -106,7 +106,7 @@ export default function IncidentsTable() {
   }, []);
 
   useEffect(() => {
-    //guardamos solo filtros, así evitamos guardar datos de la tabla por error
+    //guardamos solo filtros, así evitamos guardar datos de la tabla ya filtrada
     window.localStorage.setItem(
       "spybee-incident-filters",
       JSON.stringify(filters),
