@@ -9,7 +9,7 @@ const layout = async ({ children }) => {
 
   return (
     <ProtectedRouteWrapper>
-      <Layout pageTitle="Hola">{children}</Layout>
+      <Layout pageTitle="Dashboard">{children}</Layout>
     </ProtectedRouteWrapper>
   );
 };
