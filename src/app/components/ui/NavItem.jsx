@@ -8,7 +8,7 @@ export const NavItem = ({ href, icon, label, description, isActive, onClick }) =
       <button
         onClick={onClick}
         className={`
-          w-full px-4 py-3 rounded-lg transition-all duration-200 ease-in-out
+          w-full px-4 py-3 cursor-pointer rounded-lg transition-all duration-200 ease-in-out
           flex items-center gap-3 text-left
           ${
             isActive

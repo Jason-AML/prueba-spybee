@@ -33,7 +33,7 @@ const DashboardPage = async () => {
         </p>
         <IncidentsTable />
       </div>
-    </>
+   </>
   );
 };
 
