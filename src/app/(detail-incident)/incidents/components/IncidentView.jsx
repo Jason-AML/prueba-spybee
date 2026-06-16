@@ -1,6 +1,6 @@
 "use client";
 
-import IncidentMap from "../../components/map/IncidentMap";
+import IncidentMap from "../../../components/map/IncidentMap";
 import Image from "next/image";
 import MoreIncident from "./MoreIncident";
 

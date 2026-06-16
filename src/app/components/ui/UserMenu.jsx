@@ -1,12 +1,26 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { userMenuItems } from '@/app/config/navigationConfig';
-
-export const UserMenu = ({ userName = 'Usuario' }) => {
+import { useState } from "react";
+import { signOut } from "@/services/auth/auth";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+export const UserMenu = ({ userName = "Usuario" }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { user } = useAuth();
+  console.log(user);
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      await signOut();
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+      setLoading(false);
+      router.push("/login");
+    }
+  };
   return (
     <div className="relative">
       <button
@@ -18,24 +32,22 @@ export const UserMenu = ({ userName = 'Usuario' }) => {
         <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
           {user?.email.charAt(0).toUpperCase()}
         </div>
-        <span className="text-sm font-medium text-gray-700">{userName}</span>
-        <span className={`text-xs transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+        <span className="text-sm font-medium text-gray-700">{user?.email}</span>
+        <span
+          className={`text-xs transition-transform ${isOpen ? "rotate-180" : ""}`}
+        >
           ▼
         </span>
       </button>
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-          {userMenuItems.map((item) => (
-            <Link key={item.id} href={item.href}>
-              <button
-                className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </button>
-            </Link>
-          ))}
+          <button
+            className="cursor-pointer w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+            onClick={handleLogout}
+          >
+            {loading ? "Cerrando..." : "Cerrar Sesión"}
+          </button>
         </div>
       )}
     </div>

@@ -1,8 +1,14 @@
 import DashboardMap from "../components/DashboardMap";
 import IncidentsTable from "../components/IncidentsTable";
-const DashboardPage = () => {
-  return (<>
-    
+import { redirect } from "next/navigation";
+import { getUser } from "@/services/auth/auth.server";
+
+const DashboardPage = async () => {
+  const user = await getUser();
+  if (!user) redirect("/login");
+
+  return (
+    <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Cards de estadísticas */}
         <StatCard
@@ -15,7 +21,7 @@ const DashboardPage = () => {
         <StatCard title="Proyectos" value="24" icon="📁" trend="+2%" />
         <StatCard title="Tareas" value="156" icon="✓" trend="-3%" />
       </div>
-
+      <DashboardMap />
       {/* Sección de bienvenida */}
       <div className="mt-8 bg-white rounded-lg shadow p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">

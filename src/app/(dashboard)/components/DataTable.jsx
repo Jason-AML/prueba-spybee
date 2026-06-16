@@ -3,6 +3,9 @@ import {usePagination} from "@/app/hooks/usePagination";
 import { useRouter } from "next/navigation";
 export default function DataTable({ columns, data, pageSize = 10 }) {
   const { page, setPage, totalPages, currentItems } = usePagination(data, pageSize);
+  if(page > totalPages){
+    setPage(1)
+  }
 const router = useRouter();
   return (
     <div className="overflow-x-auto">

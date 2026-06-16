@@ -43,7 +43,7 @@ export const Sidebar = ({ isOpen = true }) => {
       </nav>
 
       {/* Footer de la sidebar */}
-      <div className="p-4 border-t border-gray-200 bg-gray-50 flex-shrink-0">
+      <div className="p-4 border-t border-gray-200 bg-gray-50 shrink-0">
         <p className="text-xs text-gray-500 text-center">v1.0.0</p>
       </div>
     </aside>
