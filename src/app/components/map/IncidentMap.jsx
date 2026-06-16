@@ -1,7 +1,11 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-
+const priorityColors = {
+  low: "#22c55e",
+  medium: "#eab308",
+  high: "#ef4444",
+};
 const IncidentMap = ({ incident, incidents }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -23,7 +27,8 @@ const IncidentMap = ({ incident, incidents }) => {
 
     items.forEach((inc) => {
       if (!inc.coordinates) return;
-      new mapboxgl.Marker({ color: "#EF4444" })
+      const color = priorityColors[inc.priority?.toLowerCase()] ?? "#6b7280";
+      new mapboxgl.Marker({ color })
         .setLngLat([inc.coordinates.lng, inc.coordinates.lat])
         .setPopup(
           new mapboxgl.Popup().setHTML(`<div style="width:200px">
