@@ -16,7 +16,7 @@ export const UserMenu = ({ userName = 'Usuario' }) => {
         aria-expanded={isOpen}
       >
         <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-          {userName.charAt(0).toUpperCase()}
+          {user?.email.charAt(0).toUpperCase()}
         </div>
         <span className="text-sm font-medium text-gray-700">{userName}</span>
         <span className={`text-xs transition-transform ${isOpen ? 'rotate-180' : ''}`}>

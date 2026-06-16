@@ -18,7 +18,7 @@ const router = useRouter();
           {currentItems.map((row, idx) => (
             <tr key={row.id ?? idx} className="border-b hover:bg-gray-50 cursor-pointer" onClick={() => router.push(`/incidents/${row.id}`)}>
               {columns.map((col) => (
-                <td key={col.key} className="px-3 py-2 text-sm">
+                <td key={col.key} className="px-3 text-center py-2 text-sm">
                   {col.render ? col.render(row) : row[col.key] ?? "-"}
                 </td>
               ))}

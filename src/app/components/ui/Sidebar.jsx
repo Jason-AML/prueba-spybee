@@ -2,6 +2,7 @@
 
 import { useNavigation } from '@/app/hooks/useNavigation';
 import { NavItem } from './NavItem';
+import Image from 'next/image';
 
 export const Sidebar = ({ isOpen = true }) => {
   const { navigationItems, isActive } = useNavigation();
@@ -18,7 +19,12 @@ export const Sidebar = ({ isOpen = true }) => {
     >
       {/* Header de la sidebar */}
       <div className="p-6 border-b border-gray-200 shrink-0">
-        <h1 className="text-2xl font-bold text-gray-800">SpyBee</h1>
+        <Image
+        src="/logo_spybee.webp"
+        alt="Logo spybee"
+        width={100}
+        height={100}
+        />
         <p className="text-xs text-gray-500 mt-1">Dashboard Control</p>
       </div>
 
