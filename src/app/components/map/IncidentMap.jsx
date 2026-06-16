@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { toLatLng } from "@/utils/coordinate";
 const priorityColors = {
   low: "#22c55e",
   medium: "#eab308",
   high: "#ef4444",
 };
-const IncidentMap = ({ incident, incidents }) => {
+const IncidentMap = ({ incident, incidents,title  }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
 
@@ -15,21 +16,25 @@ const IncidentMap = ({ incident, incidents }) => {
 
   useEffect(() => {
     if (!items.length || !mapContainer.current) return;
-
+    const firstCoords = toLatLng(items[0].coordinates);
+    if (isNaN(firstCoords.lat) || isNaN(firstCoords.lng)) return;
+    if (!firstCoords) return;
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [items[0].coordinates.lng, items[0].coordinates.lat],
+      center: [firstCoords.lng, firstCoords.lat],
       zoom: items.length === 1 ? 17 : 15,
     });
 
     items.forEach((inc) => {
-      if (!inc.coordinates) return;
+      const coords = toLatLng(inc.coordinates);
+      if (!coords) return;
+
       const color = priorityColors[inc.priority?.toLowerCase()] ?? "#6b7280";
       new mapboxgl.Marker({ color })
-        .setLngLat([inc.coordinates.lng, inc.coordinates.lat])
+        .setLngLat([coords.lng, coords.lat])
         .setPopup(
           new mapboxgl.Popup().setHTML(`<div style="width:200px">
       <img 
@@ -52,7 +57,7 @@ const IncidentMap = ({ incident, incidents }) => {
 
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-6 mt-5">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Ubicación</h2>
+      {title && <h2 className="text-xl font-bold text-gray-900 mb-4">{title}</h2>}
       <div
         ref={mapContainer}
         className="w-full h-120 rounded-lg overflow-hidden mb-4"
