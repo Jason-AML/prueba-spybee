@@ -10,15 +10,7 @@ const CATEGORIAS = [
   { key: "finishes", name: "Acabados" },
   { key: "mechanical", name: "Mecánico" },
 ];
-
-const TAG_COLORS = [
-  { bg: "#E1F5EE", text: "#0F6E56" },
-  { bg: "#EEEDFE", text: "#534AB7" },
-  { bg: "#FAEEDA", text: "#854F0B" },
-  { bg: "#FAECE7", text: "#993C1D" },
-  { bg: "#E6F1FB", text: "#185FA5" },
-];
-
+const fechaActual = new Date().toISOString().split("T")[0]
 const PRIORITY_OPTIONS = [
   {
     value: "low",
@@ -66,7 +58,14 @@ const AVATAR_PALETTE = [
   { bg: "#FAEEDA", text: "#854F0B" },
   { bg: "#E6F1FB", text: "#185FA5" },
 ];
-
+const people = [
+  { id: "1", name: "Mateo Soto", ...AVATAR_PALETTE[0] },
+  { id: "2", name: "Felipe Herrera", ...AVATAR_PALETTE[1] },
+];
+const observer = [
+  { id: "1", name: "Mateo Soto", ...AVATAR_PALETTE[0] },
+  { id: "3", name: "Sebastián Castro", ...AVATAR_PALETTE[2] },
+];
 export default function NewIncident({ onClose, onSubmit }) {
   const fileInputRef = useRef(null);
 
@@ -78,18 +77,9 @@ export default function NewIncident({ onClose, onSubmit }) {
     priority: "low",
   });
 
-  const [tags, setTags] = useState([{ label: "Reproceso", ...TAG_COLORS[3] }]);
-  const [tagInput, setTagInput] = useState("");
+  const [assignees, setAssignees] = useState([]);
 
-  const [assignees, setAssignees] = useState([
-    { id: "1", name: "Mateo Soto", ...AVATAR_PALETTE[0] },
-    { id: "2", name: "Felipe Herrera", ...AVATAR_PALETTE[1] },
-  ]);
-
-  const [observers, setObservers] = useState([
-    { id: "1", name: "Mateo Soto", ...AVATAR_PALETTE[0] },
-    { id: "3", name: "Sebastián Castro", ...AVATAR_PALETTE[2] },
-  ]);
+  const [observers, setObservers] = useState([]);
   const [location, setLocation] = useState({
     lat: "",
     lng: "",
@@ -129,22 +119,16 @@ export default function NewIncident({ onClose, onSubmit }) {
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleTagKeyDown = (e) => {
-    if (e.key !== "Enter") return;
-    e.preventDefault();
-    const val = tagInput.trim();
-    if (!val) return;
-    const color = TAG_COLORS[tags.length % TAG_COLORS.length];
-    setTags((prev) => [...prev, { label: val, ...color }]);
-    setTagInput("");
-  };
-
-  const removeTag = (i) =>
-    setTags((prev) => prev.filter((_, idx) => idx !== i));
-
   const removeAssignee = (id) =>
     setAssignees((prev) => prev.filter((u) => u.id !== id));
-
+  const addAssignee = (user) => setAssignees((prev) => [...prev, user]);
+  const addObserver = (user) => setObservers((prev) => [...prev, user]);
+  const onChangeSelect = (e, options, currentList, fn) => {
+    const selected = options.find((p) => p.id === e.target.value);
+    if (!selected) return;
+    if (currentList.some((a) => a.id === selected.id)) return;
+    fn(selected);
+  };
   const removeObserver = (id) =>
     setObservers((prev) => prev.filter((u) => u.id !== id));
 
@@ -168,7 +152,6 @@ export default function NewIncident({ onClose, onSubmit }) {
     setFiles((prev) => prev.filter((f) => f.id !== id));
 
   const handleSubmit = () => {
-    // Aquí va tu lógica de submit (llamada a Supabase, etc.)
     const payload = { ...form, tags, assignees, observers, location, files };
     console.log("Payload:", payload);
     onSubmit?.(payload);
@@ -238,6 +221,7 @@ export default function NewIncident({ onClose, onSubmit }) {
             <input
               type="date"
               name="dueDate"
+              min={fechaActual}
               value={form.dueDate}
               onChange={handleChange}
               className={inputCls}
@@ -272,47 +256,43 @@ export default function NewIncident({ onClose, onSubmit }) {
           </div>
         </Field>
 
-        {/* Etiquetas */}
-        <Field label="Etiquetas" required>
-          <div className="flex flex-wrap gap-1.5 items-center px-3 py-2 border border-neutral-200 dark:border-neutral-700 rounded-lg min-h-[40px]">
-            {tags.map((tag, i) => (
-              <span
-                key={i}
-                className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
-                style={{ background: tag.bg, color: tag.text }}
-              >
-                {tag.label}
-                <button
-                  type="button"
-                  onClick={() => removeTag(i)}
-                  className="opacity-60 hover:opacity-100 leading-none"
-                  aria-label="Quitar etiqueta"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
-            <input
-              type="text"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleTagKeyDown}
-              placeholder="Agregar etiqueta..."
-              className="flex-1 min-w-[120px] text-xs bg-transparent outline-none text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-400"
-            />
-          </div>
-          <p className="text-[11px] text-neutral-400 mt-1">
-            Presiona Enter para agregar
-          </p>
-        </Field>
-
         {/* Asignados */}
         <Field label="Asignados" required>
+          <select
+            value=""
+            onChange={(e) => onChangeSelect(e, people, assignees, addAssignee)}
+            className={inputCls}
+          >
+            <option value="" disabled>
+              Seleccionar asignado
+            </option>
+            {people.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
           <UserChipGroup users={assignees} onRemove={removeAssignee} />
         </Field>
 
         {/* Observadores */}
         <Field label="Observadores" required>
+          <select
+            value=""
+            onChange={(e) =>
+              onChangeSelect(e, observer, observers, addObserver)
+            }
+            className={inputCls}
+          >
+            <option value="" disabled>
+              Seleccionar Observadores
+            </option>
+            {observer.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
           <UserChipGroup users={observers} onRemove={removeObserver} />
         </Field>
 
@@ -325,7 +305,7 @@ export default function NewIncident({ onClose, onSubmit }) {
               onChange={(e) =>
                 setLocation((p) => ({ ...p, lat: e.target.value }))
               }
-             disabled
+              disabled
               placeholder="Latitud"
               className={inputCls}
             />
@@ -462,15 +442,8 @@ export default function NewIncident({ onClose, onSubmit }) {
       <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-700 flex justify-end gap-2.5">
         <button
           type="button"
-          onClick={onClose}
-          className="px-4 py-2 text-sm text-neutral-500 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
-        >
-          Cancelar
-        </button>
-        <button
-          type="button"
           onClick={handleSubmit}
-          className="px-5 py-2 text-sm font-medium text-white bg-[#1D9E75] rounded-lg hover:bg-[#177a5b] transition-colors flex items-center gap-2"
+          className="px-5 py-2 text-sm font-medium text-white bg-amber-300 rounded-lg hover:bg-amber-500 cursor-pointer transition-colors flex items-center gap-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
