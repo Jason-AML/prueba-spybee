@@ -7,7 +7,14 @@ import CustomBarChart from "../components/CustomBarChart";
 import { ModalControl } from "@/app/components/modal/ModalControl";
 import NewIncident from "@/app/components/modal/UI/NewIncident";
 
-const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#3b82f6', '#8b5cf6'];
+const COLORS = [
+  "#6366f1",
+  "#f59e0b",
+  "#10b981",
+  "#ef4444",
+  "#3b82f6",
+  "#8b5cf6",
+];
 const DashboardPage = async () => {
   const user = await getUser();
   if (!user) redirect("/login");
@@ -18,26 +25,37 @@ const DashboardPage = async () => {
     { name: "Group D", value: 200, fill: COLORS[3] },
   ];
   return (
-    <><ModalControl action="Nueva Incidencia"><NewIncident/></ModalControl>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <CustomPieChart title="Incidencias por estado" data={data} />
-        <CustomPieChart title="Incidencias por prioridad" data={data} />
-        <CustomBarChart title="Prueba Bar"/>
-      </div>
+    <>
+      <div className="flex flex-col gap-5">
+        <ModalControl action="Nueva Incidencia">
+          <NewIncident />
+        </ModalControl>
+        <section aria-label="Estadísticas">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <CustomPieChart title="Incidencias por estado" data={data} />
+            <CustomPieChart title="Incidencias por prioridad" data={data} />
+            <CustomBarChart title="Prueba Bar" />
+          </div>
+        </section>
 
-      <DashboardMap />
-      {/* Sección de bienvenida */}
-      <div className="mt-8 bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Historial de Incidencias
-        </h2>
-        <p className="text-gray-600">
-          Puedes filtrar las incidencias por prioridad, estado, proyecto o
-          responsable para encontrar rápidamente lo que buscas.
-        </p>
-        <IncidentsTable />
+        <section aria-label="Mapa de incidencias">
+          <DashboardMap />
+        </section>
+        {/* Sección de bienvenida */}
+        <section aria-label="Historial de incidencias">
+          <div className="mt-8 bg-white rounded-lg shadow p-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              Historial de Incidencias
+            </h2>
+            <p className="text-gray-600">
+              Puedes filtrar las incidencias por prioridad, estado, proyecto o
+              responsable para encontrar rápidamente lo que buscas.
+            </p>
+            <IncidentsTable />
+          </div>
+        </section>
       </div>
-   </>
+    </>
   );
 };
 
