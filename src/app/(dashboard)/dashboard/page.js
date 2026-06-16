@@ -3,8 +3,10 @@ import IncidentsTable from "../components/IncidentsTable";
 import { redirect } from "next/navigation";
 import { getUser } from "@/services/auth/auth.server";
 import CustomPieChart from "../components/CustomPieChart";
+import CustomBarChart from "../components/CustomBarChart";
 import { ModalControl } from "@/app/components/modal/ModalControl";
 import NewIncident from "@/app/components/modal/UI/NewIncident";
+
 const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#3b82f6', '#8b5cf6'];
 const DashboardPage = async () => {
   const user = await getUser();
@@ -20,7 +22,7 @@ const DashboardPage = async () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <CustomPieChart title="Incidencias por estado" data={data} />
         <CustomPieChart title="Incidencias por prioridad" data={data} />
-        <CustomPieChart title="Incidencias por tipo" data={data} />
+        <CustomBarChart title="Prueba Bar"/>
       </div>
 
       <DashboardMap />
