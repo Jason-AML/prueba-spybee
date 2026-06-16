@@ -2,25 +2,25 @@ import DashboardMap from "../components/DashboardMap";
 import IncidentsTable from "../components/IncidentsTable";
 import { redirect } from "next/navigation";
 import { getUser } from "@/services/auth/auth.server";
-
+import CustomPieChart from "../components/CustomPieChart";
+const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#3b82f6', '#8b5cf6'];
 const DashboardPage = async () => {
   const user = await getUser();
   if (!user) redirect("/login");
-
+  const data = [
+    { name: "Group A", value: 400, fill: COLORS[0] },
+    { name: "Group B", value: 300, fill: COLORS[1] },
+    { name: "Group C", value: 300, fill: COLORS[2] },
+    { name: "Group D", value: 200, fill: COLORS[3] },
+  ];
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Cards de estadísticas */}
-        <StatCard
-          title="Usuarios Activos"
-          value="213131"
-          icon="👥"
-          trend="+12%"
-        />
-        <StatCard title="Ingresos" value="23123123" icon="💰" trend="+8%" />
-        <StatCard title="Proyectos" value="24" icon="📁" trend="+2%" />
-        <StatCard title="Tareas" value="156" icon="✓" trend="-3%" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <CustomPieChart title="Incidencias por estado" data={data} />
+        <CustomPieChart title="Incidencias por prioridad" data={data} />
+        <CustomPieChart title="Incidencias por tipo" data={data} />
       </div>
+
       <DashboardMap />
       {/* Sección de bienvenida */}
       <div className="mt-8 bg-white rounded-lg shadow p-6">
@@ -35,27 +35,6 @@ const DashboardPage = async () => {
       </div>
       <DashboardMap/>
    </>
-  );
-};
-
-const StatCard = ({ title, value, icon, trend }) => {
-  const isPositive = !trend.startsWith("-");
-
-  return (
-    <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-gray-600 text-sm font-medium">{title}</p>
-          <p className="text-3xl font-bold text-gray-800 mt-2">{value}</p>
-          <p
-            className={`text-sm mt-2 ${isPositive ? "text-green-600" : "text-red-600"}`}
-          >
-            {trend} desde el mes pasado
-          </p>
-        </div>
-        <span className="text-4xl">{icon}</span>
-      </div>
-    </div>
   );
 };
 
