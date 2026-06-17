@@ -3,14 +3,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import IncidentMap from "../../map/IncidentMap";
 import { toLatLng } from "@/utils/coordinate";
-const CATEGORIAS = [
-  { key: "plumbing", name: "Hidrosanitario" },
-  { key: "electrical", name: "Eléctrico" },
-  { key: "structural", name: "Estructural" },
-  { key: "finishes", name: "Acabados" },
-  { key: "mechanical", name: "Mecánico" },
-];
-const fechaActual = new Date().toISOString().split("T")[0]
+import { useIncidentStats } from "@/app/hooks/useIncidentStats";
+import { useIncidentContext } from "@/context/incidentsContext";
+import { useAuth } from "@/context/AuthContext";
+const fechaActual = new Date().toISOString().split("T")[0];
 const PRIORITY_OPTIONS = [
   {
     value: "low",
@@ -41,38 +37,19 @@ function getInitials(name) {
     .slice(0, 2);
 }
 
-function Avatar({ name, bg, textColor }) {
-  return (
-    <div
-      className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0"
-      style={{ background: bg, color: textColor }}
-    >
-      {getInitials(name)}
-    </div>
-  );
-}
-
-const AVATAR_PALETTE = [
-  { bg: "#E1F5EE", text: "#0F6E56" },
-  { bg: "#EEEDFE", text: "#534AB7" },
-  { bg: "#FAEEDA", text: "#854F0B" },
-  { bg: "#E6F1FB", text: "#185FA5" },
-];
-const people = [
-  { id: "1", name: "Mateo Soto", ...AVATAR_PALETTE[0] },
-  { id: "2", name: "Felipe Herrera", ...AVATAR_PALETTE[1] },
-];
-const observer = [
-  { id: "1", name: "Mateo Soto", ...AVATAR_PALETTE[0] },
-  { id: "3", name: "Sebastián Castro", ...AVATAR_PALETTE[2] },
-];
 export default function NewIncident({ onClose, onSubmit }) {
+  const { user } = useAuth();
+  const getName = user.email.split("@")[0];
   const fileInputRef = useRef(null);
+  const { value, setValue } = useIncidentContext();
+  const { people, byType, projects } = useIncidentStats(value);
 
   const [form, setForm] = useState({
     title: "",
     description: "",
-    categoria: "",
+    type: "",
+    owner: "",
+    project: "",
     dueDate: "",
     priority: "low",
   });
@@ -98,21 +75,7 @@ export default function NewIncident({ onClose, onSubmit }) {
     handleGetLocation();
   }, [handleGetLocation]);
 
-  const [files, setFiles] = useState([
-    {
-      id: "f1",
-      name: "evidencia_1_2.png",
-      type: "image",
-      preview: "https://picsum.photos/seed/inc1_2/400/300",
-    },
-    {
-      id: "f2",
-      name: "evidencia_1_3.png",
-      type: "image",
-      preview: "https://picsum.photos/seed/inc1_3/400/300",
-    },
-    { id: "f3", name: "evidencia_1_1.mp4", type: "video", preview: null },
-  ]);
+  const [media, setMedia] = useState([]);
 
   // --- Handlers ---
 
@@ -145,17 +108,48 @@ export default function NewIncident({ onClose, onSubmit }) {
         ? URL.createObjectURL(file)
         : null,
     }));
-    setFiles((prev) => [...prev, ...newFiles]);
+    setMedia((prev) => [...prev, ...newFiles]);
   };
 
   const removeFile = (id) =>
-    setFiles((prev) => prev.filter((f) => f.id !== id));
-
+    setMedia((prev) => prev.filter((f) => f.id !== id));
+  const selectedType = Object.entries(byType).find(
+    ([name]) => name === form.type,
+  );
+  const selectedProject = projects.find((p) => p.id === form.project);
   const handleSubmit = () => {
-    const payload = { ...form, tags, assignees, observers, location, files };
-    console.log("Payload:", payload);
-    onSubmit?.(payload);
+    const newIncident = {
+      ...form,
+      id: crypto.randomUUID(),
+      sequenceId: String(value.length + 1).padStart(4, "0"),
+      order: value.length + 1,
+      assignees,
+      type: {
+        key: form.type,
+        name: form.type,
+      },
+      owner: {
+        id: user.id,
+        name: getName,
+        email: user.email,
+        avatarUrl: user.avatarUrl ?? null,
+      },
+      project: selectedProject,
+      observers,
+      coordinates: { lat: location.lat, lng: location.lng },
+      locationDescription: location.description,
+      media,
+      status: "open",
+      approval: false,
+      deleted: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    setValue((prev) => [newIncident, ...prev]);
+    onSubmit?.(newIncident);
     onClose?.();
+    console.log(newIncident);
   };
 
   return (
@@ -202,7 +196,7 @@ export default function NewIncident({ onClose, onSubmit }) {
         <div className="grid grid-cols-2 gap-4">
           <Field label="Categoría" required>
             <select
-              name="categoria"
+              name="type"
               value={form.categoria}
               onChange={handleChange}
               className={inputCls}
@@ -210,9 +204,9 @@ export default function NewIncident({ onClose, onSubmit }) {
               <option value="" disabled>
                 Seleccionar categoría
               </option>
-              {CATEGORIAS.map((c) => (
-                <option key={c.key} value={c.key}>
-                  {c.name}
+              {Object.keys(byType).map((c) => (
+                <option key={c} value={c}>
+                  {c}
                 </option>
               ))}
             </select>
@@ -228,7 +222,24 @@ export default function NewIncident({ onClose, onSubmit }) {
             />
           </Field>
         </div>
-
+        {/*Projects*/}
+        <Field label="Proyecto" required>
+          <select
+            name="project"
+            value={form.project}
+            onChange={handleChange}
+            className={inputCls}
+          >
+            <option value="" disabled>
+              Seleccionar proyecto
+            </option>
+            {projects.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </Field>
         {/* Prioridad */}
         <Field label="Prioridad" required>
           <div className="flex gap-2">
@@ -239,7 +250,7 @@ export default function NewIncident({ onClose, onSubmit }) {
                 onClick={() =>
                   setForm((prev) => ({ ...prev, priority: p.value }))
                 }
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border text-xs font-medium transition-all
+                className={`flex-1 cursor-pointer flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border text-xs font-medium transition-all
                     ${
                       form.priority === p.value
                         ? p.activeClass
@@ -279,15 +290,13 @@ export default function NewIncident({ onClose, onSubmit }) {
         <Field label="Observadores" required>
           <select
             value=""
-            onChange={(e) =>
-              onChangeSelect(e, observer, observers, addObserver)
-            }
+            onChange={(e) => onChangeSelect(e, people, observers, addObserver)}
             className={inputCls}
           >
             <option value="" disabled>
               Seleccionar Observadores
             </option>
-            {observer.map((c) => (
+            {people.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
               </option>
@@ -376,9 +385,9 @@ export default function NewIncident({ onClose, onSubmit }) {
             className="hidden"
           />
 
-          {files.length > 0 && (
+          {media.length > 0 && (
             <div className="grid grid-cols-3 gap-2 mt-3">
-              {files.map((f) => (
+              {media.map((f) => (
                 <div
                   key={f.id}
                   className="relative aspect-[4/3] rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center"
