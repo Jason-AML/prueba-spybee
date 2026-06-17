@@ -17,7 +17,14 @@ export default function SimpleRadarChart({ title, incidents = [] }) {
     subject: key,
     total: value,
   }));
-
+if (data.length < 3) {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex flex-col items-center justify-center h-70.5">
+      {title && <h2 className="text-sm font-medium mb-2">{title}</h2>}
+      <p className="text-gray-400 text-sm">Se necesitan al menos 3 tipos de incidente para mostrar este gráfico.</p>
+    </div>
+  );
+}
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
       {title && (
