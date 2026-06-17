@@ -9,7 +9,6 @@ export const UserMenu = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
-  console.log(user);
   const handleLogout = async () => {
     setLoading(true);
     try {
