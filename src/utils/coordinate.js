@@ -1,5 +1,3 @@
-// utils/coordinates.js
-
 export const toLatLng = (source) => {
   if (!source) return null;
 
