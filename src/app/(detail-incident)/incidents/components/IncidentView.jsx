@@ -3,14 +3,16 @@
 import IncidentMap from "../../../components/map/IncidentMap";
 import Image from "next/image";
 import MoreIncident from "./MoreIncident";
-
-const IncidentView = ({ incident }) => {
+import { useIncidentContext } from "@/context/incidentsContext";
+const IncidentView = ({ idIncident }) => {
+  const {value} = useIncidentContext()
+  const incident = value.find((inc) => inc.id === idIncident)
   if (!incident) {
     return (
       <div className="p-6 bg-white rounded-lg shadow text-center">
         <p className="text-gray-500">Incidente no encontrado</p>
       </div>
-    );
+    )
   }
 
   const getStatusColor = (status) => {
@@ -336,7 +338,7 @@ const IncidentView = ({ incident }) => {
                         {media.type === "image" ? (
                           <Image
                             src={media.url}
-                            alt={media.name}
+                            alt={media.name ?? "Imagen de prueba"}
                             width={42}
                             height={42}
                             className="w-full h-full object-cover"
@@ -395,29 +397,6 @@ const IncidentView = ({ incident }) => {
 
             {/*Seccion mas incidencias*/}
 
-            {/* Etiquetas */}
-            {incident.tags.length > 0 && (
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">
-                  Etiquetas
-                </h2>
-                <div className="space-y-2">
-                  {incident.tags.map((tag) => (
-                    <div
-                      key={tag.id}
-                      className="px-3 py-2 rounded text-sm font-semibold"
-                      style={{
-                        backgroundColor: tag.color + "20",
-                        color: tag.color,
-                        border: `1px solid ${tag.color}`,
-                      }}
-                    >
-                      {tag.name}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
