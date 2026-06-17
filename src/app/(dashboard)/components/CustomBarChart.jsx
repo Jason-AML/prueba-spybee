@@ -28,7 +28,7 @@ export const CustomBarChart = ({ title, incidents }) => {
   const data = Object.entries(byPriority).map(([key, value]) => ({
     name: PRIORITY_LABELS[key] ?? key,
     total: value,
-    color: PRIORITY_COLORS[key] ?? "#6b7280",
+    fill: PRIORITY_COLORS[key] ?? "#6b7280",
   }));
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
