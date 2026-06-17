@@ -6,7 +6,7 @@ export function useIncidentStats(incidents) {
     const byPriority = {};
     const byType = {};
     const peopleMap = {};
-
+    const byProject = {};
     for (const incident of incidents) {
       byStatus[incident.status] = (byStatus[incident.status] ?? 0) + 1;
       byPriority[incident.priority] = (byPriority[incident.priority] ?? 0) + 1;
@@ -17,7 +17,9 @@ export function useIncidentStats(incidents) {
       if (incident.owner) {
         peopleMap[incident.owner.id] = incident.owner;
       }
-
+      if (incident.project) {
+        byProject[incident.project.id] = incident.project; 
+      }
       for (const person of incident.assignees ?? []) {
         peopleMap[person.id] = person;
       }
@@ -33,6 +35,7 @@ export function useIncidentStats(incidents) {
       byPriority,
       byType,
       people: Object.values(peopleMap),
+      projects: Object.values(byProject),
     };
   }, [incidents]);
 }
