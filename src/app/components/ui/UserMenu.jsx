@@ -4,21 +4,20 @@ import { useState } from "react";
 import { signOut } from "@/services/auth/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-export const UserMenu = ({ userName = "Usuario" }) => {
+export const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
-  console.log(user);
   const handleLogout = async () => {
     setLoading(true);
     try {
       await signOut();
+      router.push("/login");
     } catch (err) {
       console.log(err.message);
     } finally {
       setLoading(false);
-      router.push("/login");
     }
   };
   return (

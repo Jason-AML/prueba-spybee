@@ -13,29 +13,31 @@ const Form = ({ mode = "login" }) => {
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError(null);
-  try {
-    if (isLogin) {
-      await signIn(email, password);
-      router.push("/dashboard");
-    } else {
-      // Verificar si el correo ya está registrado
-      const data = await registerService(email, password);
-      if (data?.user?.identities?.length === 0) {
-        setError("Este correo ya está registrado");
-        return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (isLogin) {
+        await signIn(email, password);
+        router.push("/dashboard");
+      } else {
+        const data = await registerService(email, password);
+        //VERIFICACION SI CORREO YA ESTA REGISTRADO
+        if (data?.user?.identities?.length === 0) {
+          setError("Este correo ya está registrado");
+          setLoading(false);
+          return;
+        }
+
+        router.push("/login");
       }
-      router.push("/login");
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
     }
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <form

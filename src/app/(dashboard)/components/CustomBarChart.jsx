@@ -1,52 +1,37 @@
-"use client"
+"use client";
 
-import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  ComposedChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { useIncidentStats } from "@/app/hooks/useIncidentStats";
+const PRIORITY_LABELS = {
+  low: "Baja",
+  medium: "Media",
+  high: "Alta",
+};
 
+const PRIORITY_COLORS = {
+  low: "#22c55e",
+  medium: "#f59e0b",
+  high: "#ef4444",
+};
+export const CustomBarChart = ({ title, incidents }) => {
+  const { byPriority } = useIncidentStats(incidents);
 
-
-const data = [
-  {
-    name: 'Page A',
-    uv: 590,
-    pv: 800,
-    amt: 1400,
-  },
-  {
-    name: 'Page B',
-    uv: 868,
-    pv: 967,
-    amt: 1506,
-  },
-  {
-    name: 'Page C',
-    uv: 1397,
-    pv: 1098,
-    amt: 989,
-  },
-  {
-    name: 'Page D',
-    uv: 1480,
-    pv: 1200,
-    amt: 1228,
-  },
-  {
-    name: 'Page E',
-    uv: 1520,
-    pv: 1108,
-    amt: 1100,
-  },
-  {
-    name: 'Page F',
-    uv: 1400,
-    pv: 680,
-    amt: 1700,
-  },
-];
-
-
-export const CustomBarChart = ({ title }) => {
+  const data = Object.entries(byPriority).map(([key, value]) => ({
+    name: PRIORITY_LABELS[key] ?? key,
+    total: value,
+    fill: PRIORITY_COLORS[key] ?? "#6b7280",
+  }));
   return (
-    <div className="bg-white rounded-2xl shadow-sm">
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
       {title && (
         <h2 className="text-center text-sm font-medium mb-2">{title}</h2>
       )}
@@ -60,8 +45,7 @@ export const CustomBarChart = ({ title }) => {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="uv" barSize={20} fill="#413ea0" />
-          <Line type="monotone" dataKey="uv" stroke="#ff7300" />
+          <Bar dataKey="total" barSize={20} fill="#413ea0" />
         </ComposedChart>
       </ResponsiveContainer>
     </div>
