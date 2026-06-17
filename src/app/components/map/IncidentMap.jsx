@@ -7,7 +7,7 @@ const priorityColors = {
   medium: "#eab308",
   high: "#ef4444",
 };
-const IncidentMap = ({ incident, incidents,title  }) => {
+const IncidentMap = ({ incident, incidents, title }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
 
@@ -37,17 +37,22 @@ const IncidentMap = ({ incident, incidents,title  }) => {
         .setLngLat([coords.lng, coords.lat])
         .setPopup(
           new mapboxgl.Popup().setHTML(`<div style="width:200px">
-      <img 
-        src="${inc.media?.[0]?.url || inc.media?.[1]?.url}"
-        alt="${inc.title}"
-        style="width:100%; height:120px; object-fit:cover; border-radius:4px; margin-bottom:8px;"
-        onerror="this.style.display='none'"
-      />
-      <strong>${inc.title}</strong>
-      <a href="/incidents/${inc.id}" style="display:block; margin-top:4px; color:#3b82f6;">
-        Ver incidente
-      </a>
-    </div>`),
+  ${
+    inc.media?.[0]?.url
+      ? `
+    <img 
+      src="${inc.media[0].url}"
+      alt="${inc.title}"
+      style="width:100%; height:120px; object-fit:cover; border-radius:4px; margin-bottom:8px;"
+    />
+  `
+      : ""
+  }
+  <strong>${inc.title}</strong>
+  <a href="/incidents/${inc.id}" style="display:block; margin-top:4px; color:#3b82f6;">
+    Ver incidente
+  </a>
+</div>`),
         )
         .addTo(map.current);
     });
@@ -57,7 +62,9 @@ const IncidentMap = ({ incident, incidents,title  }) => {
 
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-6 mt-5">
-      {title && <h2 className="text-xl font-bold text-gray-900 mb-4">{title}</h2>}
+      {title && (
+        <h2 className="text-xl font-bold text-gray-900 mb-4">{title}</h2>
+      )}
       <div
         ref={mapContainer}
         className="w-full h-120 rounded-lg overflow-hidden mb-4"
