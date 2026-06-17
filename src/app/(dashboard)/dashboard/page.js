@@ -2,46 +2,20 @@ import DashboardMap from "../components/DashboardMap";
 import IncidentsTable from "../components/IncidentsTable";
 import { redirect } from "next/navigation";
 import { getUser } from "@/services/auth/auth.server";
-import CustomPieChart from "../components/CustomPieChart";
-import CustomBarChart from "../components/CustomBarChart";
 import { ModalControl } from "@/app/components/modal/ModalControl";
 import NewIncident from "@/app/components/modal/UI/NewIncident";
+import DashboardStats from "../components/DashboardStats";
 
-const COLORS = [
-  "#6366f1",
-  "#f59e0b",
-  "#10b981",
-  "#ef4444",
-  "#3b82f6",
-  "#8b5cf6",
-];
 const DashboardPage = async () => {
   const user = await getUser();
   if (!user) redirect("/login");
-  const data = [
-    { name: "Group A", value: 400, fill: COLORS[0] },
-    { name: "Group B", value: 300, fill: COLORS[1] },
-    { name: "Group C", value: 300, fill: COLORS[2] },
-    { name: "Group D", value: 200, fill: COLORS[3] },
-  ];
   return (
     <>
       <div className="flex flex-col gap-5">
         <ModalControl action="Nueva Incidencia">
           <NewIncident />
         </ModalControl>
-        <section aria-label="Estadísticas">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <CustomPieChart title="Incidencias por estado" data={data} />
-            <CustomPieChart title="Incidencias por prioridad" data={data} />
-            <CustomBarChart title="Prueba Bar" />
-          </div>
-        </section>
-
-        <section aria-label="Mapa de incidencias">
-          <DashboardMap />
-        </section>
-        {/* Sección de bienvenida */}
+        <DashboardStats />
         <section aria-label="Historial de incidencias">
           <div className="mt-8 bg-white rounded-lg shadow p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">
@@ -54,6 +28,10 @@ const DashboardPage = async () => {
             <IncidentsTable />
           </div>
         </section>
+        <section aria-label="Mapa de incidencias">
+          <DashboardMap />
+        </section>
+        {/* Tabla incidencias */}
       </div>
     </>
   );
