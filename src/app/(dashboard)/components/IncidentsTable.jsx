@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { useIncidentContext } from "../../../context/incidentsContext";
+import { useIncidentStore } from "@/store/useIncidentStore";
 import DataTable from "./DataTable";
 import { IncidentsFilters } from "./IncidentsFilters";
 
@@ -68,13 +68,10 @@ const columns = [
 ];
 
 export default function IncidentsTable() {
-  const { value, filteredValue, setFilteredValue } = useIncidentContext();
-  const incidents = useMemo(() => {
-    const raw = value ?? [];
-    return Array.isArray(raw) && raw.length && Array.isArray(raw[0])
-      ? raw.flat()
-      : raw;
-  }, [value]);
+  const incidents = useIncidentStore((state) => state.rawIncidents);
+  const setFilteredIncidents = useIncidentStore(
+    (state) => state.setFilteredIncidents,
+  );
 
   //iniciamos con filtros por defecto para mostrar solo incidencias abiertas de alta prioridad, para facilitar la identificación de problemas críticos sin necesidad de configurar filtros inicialmente
   const [filters, setFilters] = useState({
@@ -93,9 +90,10 @@ export default function IncidentsTable() {
       // Validamos que el contenido sea un JSON válido antes de intentar parsearlo
       const parsed = JSON.parse(saved);
       if (parsed && typeof parsed === "object") {
-        setFilters({                      //en caso que el parsed no tenga los campos, enviamos un string vacio para evitar null
+        setFilters({
+          //en caso que el parsed no tenga los campos, enviamos un string vacio para evitar null
           status: parsed.status || "",
-          project: parsed.project || "",  
+          project: parsed.project || "",
           priority: parsed.priority || "",
           owner: parsed.owner || "",
           dateRange: parsed.dateRange || "",
@@ -171,9 +169,9 @@ export default function IncidentsTable() {
       }),
     [incidents, filters],
   );
-  useEffect(() => {
-    setFilteredValue(filteredIncidents);
-  }, [filteredIncidents]);
+ useEffect(() => {
+  setFilteredIncidents(filteredIncidents);
+}, [filteredIncidents, setFilteredIncidents]);
   return (
     <div>
       <IncidentsFilters

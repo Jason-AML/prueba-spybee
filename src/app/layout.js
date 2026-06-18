@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { IncidentProvider } from "../context/incidentsContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { getUser } from "@/services/auth/auth.server";
 const geistSans = Geist({
@@ -20,16 +19,14 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const user = await getUser()
+  const user = await getUser();
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <IncidentProvider>
-          <AuthProvider initialUser={user}>{children}</AuthProvider>
-        </IncidentProvider>
+        <AuthProvider initialUser={user}>{children}</AuthProvider>
       </body>
     </html>
   );

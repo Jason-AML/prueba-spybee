@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 
 export function useIncidentStats(incidents) {
+  console.log("useIncidentStats ejecutado");
+console.log("total incidencias:", incidents.length);
   return useMemo(() => {
     const byStatus = {};
     const byPriority = {};
