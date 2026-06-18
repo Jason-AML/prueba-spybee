@@ -17,32 +17,51 @@ export default function SimpleRadarChart({ title, incidents = [] }) {
     subject: key,
     total: value,
   }));
-if (data.length < 3) {
+
+  if (data.length < 3) {
+    return (
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex flex-col items-center justify-center h-70.5">
+        {title && <h2 className="text-sm font-medium text-gray-500 mb-2">{title}</h2>}
+        <p className="text-gray-400 text-sm">Se necesitan al menos 3 tipos de incidente para mostrar este gráfico.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex flex-col items-center justify-center h-70.5">
-      {title && <h2 className="text-sm font-medium mb-2">{title}</h2>}
-      <p className="text-gray-400 text-sm">Se necesitan al menos 3 tipos de incidente para mostrar este gráfico.</p>
-    </div>
-  );
-}
-  return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
       {title && (
-        <h2 className="text-center text-sm font-medium mb-2">{title}</h2>
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+          {title}
+        </h2>
       )}
       <ResponsiveContainer width="100%" height={250}>
-        <RadarChart outerRadius="80%" data={data}>
-          <PolarGrid />
-          <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: "#334155" }} />
+        <RadarChart outerRadius="75%" data={data}>
+          <PolarGrid stroke="#e2e8f0" strokeDasharray="4 4" />
+          <PolarAngleAxis
+            dataKey="subject"
+            tick={{ fontSize: 11, fill: "#94a3b8", fontWeight: 500 }}
+          />
           <Tooltip
             formatter={(value) => [value, "Incidentes"]}
-            contentStyle={{ borderRadius: "8px", border: "1px solid #334155" }}
+            contentStyle={{
+              borderRadius: "10px",
+              border: "none",
+              backgroundColor: "#1e293b",
+              color: "#f8fafc",
+              fontSize: "12px",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+            }}
+            labelStyle={{ color: "#94a3b8" }}
+            itemStyle={{ color: "#f8fafc" }}
           />
           <Radar
             dataKey="total"
-            stroke="#334155"
-            fill="#FFD54F"
-            fillOpacity={0.4}
+            stroke="#6366f1"
+            strokeWidth={2}
+            fill="#6366f1"
+            fillOpacity={0.15}
+            dot={{ r: 3, fill: "#6366f1", strokeWidth: 0 }}
+            activeDot={{ r: 5, fill: "#6366f1" }}
           />
         </RadarChart>
       </ResponsiveContainer>
