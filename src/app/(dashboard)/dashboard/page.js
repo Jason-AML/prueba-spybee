@@ -2,10 +2,8 @@ import DashboardMap from "../components/DashboardMap";
 import IncidentsTable from "../components/IncidentsTable";
 import { redirect } from "next/navigation";
 import { getUser } from "@/services/auth/auth.server";
-import { ModalControl } from "@/app/components/modal/ModalControl";
-import NewIncident from "@/app/components/modal/content/NewIncident";
 import DashboardStats from "../components/DashboardStats";
-import KpiDashboard from "../components/KpiDashboard";
+
 
 const DashboardPage = async () => {
   const user = await getUser();
@@ -13,11 +11,10 @@ const DashboardPage = async () => {
   return (
     <>
       <div className="flex flex-col gap-5">
-        <ModalControl action="Nueva Incidencia">
-          <NewIncident />
-        </ModalControl>
-        <KpiDashboard/>
         <DashboardStats />
+        <div className="grid grid-cols-12 gap-gutter">
+
+        </div>
         <section aria-label="Historial de incidencias">
           <div className="mt-8 bg-white rounded-lg shadow p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">

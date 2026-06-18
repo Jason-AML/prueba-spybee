@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-export const NavItem = ({ href, icon, label, description, isActive, onClick }) => {
+export const NavItem = ({ href, label, isActive, onClick }) => {
   return (
     <Link href={href}>
       <button
@@ -12,19 +12,15 @@ export const NavItem = ({ href, icon, label, description, isActive, onClick }) =
           flex items-center gap-3 text-left
           ${
             isActive
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'text-gray-700 hover:bg-gray-100'
+              ? 'bg-gray-700 text-white shadow-md'
+              : 'text-[#4d4636] hover:text-[#765a00]'
           }
         `}
         aria-current={isActive ? 'page' : undefined}
-        title={description}
+        title={label}
       >
-        <span className="text-xl shrink-0">{icon}</span>
         <div className="flex-1 min-w-0">
           <p className="font-medium text-sm truncate">{label}</p>
-          <p className={`text-xs truncate ${isActive ? 'text-blue-100' : 'text-gray-500'}`}>
-            {description}
-          </p>
         </div>
       </button>
     </Link>

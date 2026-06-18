@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 
 export function useIncidentStats(incidents) {
-  console.log("useIncidentStats ejecutado");
-console.log("total incidencias:", incidents.length);
   return useMemo(() => {
     const byStatus = {};
     const byPriority = {};
@@ -20,7 +18,7 @@ console.log("total incidencias:", incidents.length);
         peopleMap[incident.owner.id] = incident.owner;
       }
       if (incident.project) {
-        byProject[incident.project.id] = incident.project; 
+        byProject[incident.project.id] = incident.project;
       }
       for (const person of incident.assignees ?? []) {
         peopleMap[person.id] = person;

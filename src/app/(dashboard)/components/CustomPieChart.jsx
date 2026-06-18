@@ -65,7 +65,7 @@ const STATUS_COLORS = {
   on_paused: "#ef4444",
 };
 
-export default function CustomPieChart({ isAnimationActive = true, title, incidents = [] }) {
+export default function CustomPieChart({ isAnimationActive = true, title, incidents = [], className="" }) {
   const { byStatus } = useIncidentStats(incidents);
 
   const data = Object.entries(byStatus).map(([key, value]) => ({
@@ -75,9 +75,10 @@ export default function CustomPieChart({ isAnimationActive = true, title, incide
   }));
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div className={` rounded-2xl  shadow-2xl p-5 ${className}`}>
+      
       {title && (
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+        <h2 className="text-sm font-semibold text-black uppercase tracking-wide mb-4">
           {title}
         </h2>
       )}

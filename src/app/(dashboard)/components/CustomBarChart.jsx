@@ -45,7 +45,7 @@ const CustomTooltip = ({ active, payload }) => {
   );
 };
 
-export const CustomBarChart = ({ title, incidents }) => {
+export const CustomBarChart = ({ title, incidents, className="" }) => {
   const { byPriority } = useIncidentStats(incidents);
 
   const data = Object.entries(byPriority).map(([key, value]) => ({
@@ -55,9 +55,9 @@ export const CustomBarChart = ({ title, incidents }) => {
   }));
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div className={`rounded-2xl  shadow-2xl p-5 ${className}`}>
       {title && (
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+        <h2 className="text-sm font-semibold text-black uppercase tracking-wide mb-4">
           {title}
         </h2>
       )}
@@ -70,12 +70,12 @@ export const CustomBarChart = ({ title, incidents }) => {
           <XAxis
             dataKey="name"
             scale="band"
-            tick={{ fontSize: 12, fill: "#94a3b8", fontWeight: 500 }}
+            tick={{ fontSize: 12, fill: "#000000", fontWeight: 500 }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 11, fill: "#cbd5e1" }}
+            tick={{ fontSize: 11, fill: "#000000" }}
             axisLine={false}
             tickLine={false}
             allowDecimals={false}
