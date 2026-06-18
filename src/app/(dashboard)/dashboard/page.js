@@ -3,7 +3,7 @@ import IncidentsTable from "../components/IncidentsTable";
 import { redirect } from "next/navigation";
 import { getUser } from "@/services/auth/auth.server";
 import { ModalControl } from "@/app/components/modal/ModalControl";
-import NewIncident from "@/app/components/modal/UI/NewIncident";
+import NewIncident from "@/app/components/modal/content/NewIncident";
 import DashboardStats from "../components/DashboardStats";
 
 const DashboardPage = async () => {
