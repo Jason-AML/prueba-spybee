@@ -4,8 +4,9 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import IncidentMap from "../../map/IncidentMap";
 import { toLatLng } from "@/utils/coordinate";
 import { useIncidentStats } from "@/app/hooks/useIncidentStats";
-import { useIncidentContext } from "@/context/incidentsContext";
+import { useIncidentStore } from "@/store/useIncidentStore";
 import { useAuth } from "@/context/AuthContext";
+
 const fechaActual = new Date().toISOString().split("T")[0];
 const PRIORITY_OPTIONS = [
   {
@@ -41,8 +42,9 @@ export default function NewIncident() {
   const { user } = useAuth();
   const getName = user.email.split("@")[0];
   const fileInputRef = useRef(null);
-  const { value, setValue } = useIncidentContext();
-  const { people, byType, projects } = useIncidentStats(value);
+  const incidents = useIncidentStore((state) => state.rawIncidents);
+  const addIncident = useIncidentStore((state) => state.addIncident);
+  const { people, byType, projects } = useIncidentStats(incidents);
 
   const [form, setForm] = useState({
     title: "",
@@ -129,8 +131,8 @@ export default function NewIncident() {
     const newIncident = {
       ...form,
       id: crypto.randomUUID(),
-      sequenceId: String(value.length + 1).padStart(4, "0"),
-      order: value.length + 1,
+      sequenceId: String(incidents.length + 1).padStart(4, "0"),
+      order: incidents.length + 1,
       assignees,
       type: {
         key: form.type,
@@ -154,7 +156,7 @@ export default function NewIncident() {
       updatedAt: new Date().toISOString(),
     };
 
-    setValue((prev) => [newIncident, ...prev]);
+    addIncident(newIncident);
     setForm({
       title: "",
       description: "",

@@ -3,10 +3,10 @@
 import IncidentMap from "../../../components/map/IncidentMap";
 import Image from "next/image";
 import MoreIncident from "./MoreIncident";
-import { useIncidentContext } from "@/context/incidentsContext";
+import { useIncidentStore } from "@/store/useIncidentStore";
 const IncidentView = ({ idIncident }) => {
-  const {value} = useIncidentContext()
-  const incident = value.find((inc) => inc.id === idIncident)
+   const rawIncidents = useIncidentStore((state) => state.rawIncidents);
+  const incident = rawIncidents.find((inc) => inc.id === idIncident)
   if (!incident) {
     return (
       <div className="p-6 bg-white rounded-lg shadow text-center">

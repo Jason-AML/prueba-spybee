@@ -1,17 +1,19 @@
 "use client"
-import { useIncidentContext } from "@/context/incidentsContext";
+import { useIncidentStore } from "@/store/useIncidentStore";
 import CustomBarChart from "./CustomBarChart";
 import CustomPieChart from "./CustomPieChart";
 import SimpleRadarChart from "./SimpleRadarChart";
 
 const DashboardStats = () => {
-    const {filteredValue }= useIncidentContext()
+    const filteredIncidents = useIncidentStore(
+    (state) => state.filteredIncidents,
+  );
   return (
     <section aria-label="Estadísticas">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <CustomBarChart title="Prioridad" incidents={filteredValue} />
-            <CustomPieChart title="Estado" incidents={filteredValue}/>
-            <SimpleRadarChart title="Tipo" incidents={filteredValue}/>
+            <CustomBarChart title="Prioridad" incidents={filteredIncidents} />
+            <CustomPieChart title="Estado" incidents={filteredIncidents}/>
+            <SimpleRadarChart title="Tipo" incidents={filteredIncidents}/>
           </div>
         </section>
 

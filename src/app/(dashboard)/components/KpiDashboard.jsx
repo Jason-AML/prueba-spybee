@@ -1,15 +1,15 @@
 "use client"
 
 import { useIncidentStats } from "@/app/hooks/useIncidentStats"
-import { useIncidentContext } from "@/context/incidentsContext"
+import { useIncidentStore } from "@/store/useIncidentStore"
 
 const KpiDashboard = () => {
-  const {value} = useIncidentContext()
-  const {people} = useIncidentStats(value)
+  const incidents = useIncidentStore((stats)=> stats.rawIncidents)
+  const {people} = useIncidentStats(incidents)
   const employees = people.length
-  const total_incidents = value.length
-  const closed = value.filter((inc)=>inc.status === "closed").length
-  const open = value.filter((inc)=>inc.status === "open").length
+  const total_incidents = incidents.length
+  const closed = incidents.filter((inc)=>inc.status === "closed").length
+  const open = incidents.filter((inc)=>inc.status === "open").length
   const cards = [
   {
     label: "Abiertas",

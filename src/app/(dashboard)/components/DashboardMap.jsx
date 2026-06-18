@@ -1,11 +1,13 @@
 "use client"
 import React from 'react'
-import { useIncidentContext } from '@/context/incidentsContext'
+import { useIncidentStore } from '@/store/useIncidentStore'
 import IncidentMap from '@/app/components/map/IncidentMap'
 const DashboardMap = () => {
-    const {filteredValue} = useIncidentContext()
+    const filteredIncidents = useIncidentStore(
+        (state) => state.filteredIncidents,
+      );
   return (
-    <IncidentMap incidents={filteredValue}/>
+    <IncidentMap incidents={filteredIncidents}/>
   )
 }
 
