@@ -1,47 +1,53 @@
-const cards = [
+"use client"
+
+import { useIncidentStats } from "@/app/hooks/useIncidentStats"
+import { useIncidentContext } from "@/context/incidentsContext"
+
+const KpiDashboard = () => {
+  const {value} = useIncidentContext()
+  const {people} = useIncidentStats(value)
+  const employees = people.length
+  const total_incidents = value.length
+  const closed = value.filter((inc)=>inc.status === "closed").length
+  const open = value.filter((inc)=>inc.status === "open").length
+  const cards = [
   {
     label: "Abiertas",
     key: "open",
-    value: 14,
+    value: open,
     icon: "warning",
     iconBg: "#FAECE7",
     iconColor: "#D85A30",
-    trend: "+3 esta semana",
-    trendType: "down",
+   
   },
   {
     label: "Creadas",
     key: "created",
-    value: 38,
+    value: total_incidents,
     icon: "add_circle",
     iconBg: "#E6F1FB",
     iconColor: "#378ADD",
-    trend: "Igual que ayer",
-    trendType: "neutral",
+    
   },
   {
     label: "Cerradas",
     key: "closed",
-    value: 24,
+    value: closed,
     icon: "check_circle",
     iconBg: "#E1F5EE",
     iconColor: "#1D9E75",
-    trend: "+5 esta semana",
-    trendType: "up",
+    
   },
   {
     label: "Empleados",
     key: "employees",
-    value: 87,
+    value: employees,
     icon: "people",
     iconBg: "#EEEDFE",
     iconColor: "#7F77DD",
-    trend: "Sin cambios",
-    trendType: "neutral",
+   
   },
 ]
-
-const KpiDashboard = ({ stats }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
       {cards.map((card) => (
@@ -58,10 +64,7 @@ const KpiDashboard = ({ stats }) => {
             </span>
           </div>
           <p className="text-xs text-gray-400 mb-1">{card.label}</p>
-          <p className="text-2xl font-medium text-gray-800">{stats?.[card.key] ?? card.value}</p>
-          <p className={`text-xs mt-1 ${card.trendType === "up" ? "text-emerald-600" : card.trendType === "down" ? "text-red-500" : "text-gray-400"}`}>
-            {card.trend}
-          </p>
+          <p className="text-2xl font-medium text-gray-800">{card?.[card.key] ?? card.value}</p>
         </div>
       ))}
     </div>
