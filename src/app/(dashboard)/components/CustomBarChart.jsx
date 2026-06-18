@@ -55,7 +55,7 @@ export const CustomBarChart = ({ title, incidents, className="" }) => {
   }));
 
   return (
-    <div className={`rounded-2xl  shadow-2xl p-5 ${className}`}>
+    <div className={`rounded-2xl shadow-2xl p-5 ${className}`}>
       {title && (
         <h2 className="text-sm font-semibold text-black uppercase tracking-wide mb-4">
           {title}
@@ -64,7 +64,7 @@ export const CustomBarChart = ({ title, incidents, className="" }) => {
       <ResponsiveContainer width="100%" height={250}>
         <ComposedChart
           data={data}
-          margin={{ top: 10, right: 10, bottom: 0, left: -20 }}
+         margin={{ top: 10, right: 30, bottom: 0, left: 10 }}
         >
           <CartesianGrid stroke="#f1f5f9" vertical={false} />
           <XAxis
