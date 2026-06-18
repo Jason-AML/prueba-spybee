@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { toLatLng } from "@/utils/coordinate";
 const priorityColors = {
   low: "#22c55e",
@@ -27,33 +29,48 @@ const IncidentMap = ({ incident, incidents, title }) => {
       center: [firstCoords.lng, firstCoords.lat],
       zoom: items.length === 1 ? 17 : 15,
     });
-
+    map.current.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+        placeholder: "Buscar dirección...",
+        countries: "co", 
+        language: "es",
+      }),
+    );
     items.forEach((inc) => {
       const coords = toLatLng(inc.coordinates);
       if (!coords) return;
 
       const color = priorityColors[inc.priority?.toLowerCase()] ?? "#6b7280";
+      const rawUrl = inc.media?.[0]?.url;
+      const imgSrc = rawUrl?.startsWith("http") ? rawUrl : null;
+
+      const popup = new mapboxgl.Popup().setHTML(`
+    <div style="width:200px">
+      ${imgSrc ? `<div id="img-${inc.id}" style="height:120px; background:#f3f4f6; border-radius:4px; margin-bottom:8px;"></div>` : ""}
+      <strong>${inc.title}</strong>
+      <a href="/incidents/${inc.id}" style="display:block; margin-top:4px; color:#3b82f6;">Ver incidente</a>
+    </div>
+  `);
+
+      if (imgSrc) {
+        popup.on("open", () => {
+          const container = document.getElementById(`img-${inc.id}`);
+          if (!container || container.dataset.loaded) return;
+          const img = document.createElement("img");
+          img.src = imgSrc;
+          img.alt = inc.title;
+          img.style.cssText =
+            "width:100%; height:120px; object-fit:cover; border-radius:4px;";
+          container.replaceWith(img);
+          img.dataset.loaded = "true"; 
+        });
+      }
+
       new mapboxgl.Marker({ color })
         .setLngLat([coords.lng, coords.lat])
-        .setPopup(
-          new mapboxgl.Popup().setHTML(`<div style="width:200px">
-  ${
-    inc.media?.[0]?.url
-      ? `
-    <img 
-      src="${inc.media[0].url}"
-      alt="${inc.title}"
-      style="width:100%; height:120px; object-fit:cover; border-radius:4px; margin-bottom:8px;"
-    />
-  `
-      : ""
-  }
-  <strong>${inc.title}</strong>
-  <a href="/incidents/${inc.id}" style="display:block; margin-top:4px; color:#3b82f6;">
-    Ver incidente
-  </a>
-</div>`),
-        )
+        .setPopup(popup)
         .addTo(map.current);
     });
 
