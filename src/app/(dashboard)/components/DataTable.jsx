@@ -30,12 +30,12 @@ const router = useRouter();
         </tbody>
       </table>
 
-      <div className="flex justify-between items-center mt-4 overflow-auto">
-        <button className="px-4 py-2 cursor-pointer rounded-2xl bg-amber-400 disabled:opacity-50" disabled={page === 1} onClick={() => setPage(page - 1)}>
+      <div className="flex justify-between items-center mt-4 overflow-auto p-2">
+        <button className="px-4 py-2 cursor-pointer rounded-2xl text-white bg-blue-600 transition-transform hover:scale-105 disabled:opacity-50" disabled={page === 1} onClick={() => setPage(page - 1)}>
           Anterior
         </button>
         <span>Página {page} de {totalPages}</span>
-        <button className="cursor-pointer rounded-2xl px-4 py-2 bg-amber-400 disabled:opacity-50" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
+        <button className="cursor-pointer rounded-2xl px-4 py-2 text-white bg-blue-600 transition-transform hover:scale-105 disabled:opacity-50" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
           Siguiente
         </button>
       </div>

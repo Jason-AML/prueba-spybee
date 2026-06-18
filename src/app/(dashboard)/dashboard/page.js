@@ -5,6 +5,7 @@ import { getUser } from "@/services/auth/auth.server";
 import { ModalControl } from "@/app/components/modal/ModalControl";
 import NewIncident from "@/app/components/modal/content/NewIncident";
 import DashboardStats from "../components/DashboardStats";
+import KpiDashboard from "../components/KpiDashboard";
 
 const DashboardPage = async () => {
   const user = await getUser();
@@ -15,6 +16,7 @@ const DashboardPage = async () => {
         <ModalControl action="Nueva Incidencia">
           <NewIncident />
         </ModalControl>
+        <KpiDashboard/>
         <DashboardStats />
         <section aria-label="Historial de incidencias">
           <div className="mt-8 bg-white rounded-lg shadow p-6">
@@ -25,13 +27,13 @@ const DashboardPage = async () => {
               Puedes filtrar las incidencias por prioridad, estado, proyecto o
               responsable para encontrar rápidamente lo que buscas.
             </p>
+            {/* Tabla incidencias */}
             <IncidentsTable />
           </div>
         </section>
         <section aria-label="Mapa de incidencias">
           <DashboardMap />
-        </section>
-        {/* Tabla incidencias */}
+        </section>   
       </div>
     </>
   );

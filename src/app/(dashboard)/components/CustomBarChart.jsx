@@ -7,10 +7,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 import { useIncidentStats } from "@/app/hooks/useIncidentStats";
+
 const PRIORITY_LABELS = {
   low: "Baja",
   medium: "Media",
@@ -22,6 +22,29 @@ const PRIORITY_COLORS = {
   medium: "#f59e0b",
   high: "#ef4444",
 };
+
+const CustomTooltip = ({ active, payload }) => {
+  if (!active || !payload?.length) return null;
+  const { name, total, fill } = payload[0].payload;
+  return (
+    <div
+      style={{
+        backgroundColor: "#1e293b",
+        borderRadius: "10px",
+        padding: "8px 12px",
+        fontSize: "12px",
+        color: "#f8fafc",
+        boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+      }}
+    >
+      <span style={{ color: fill, fontWeight: 600 }}>{name}</span>
+      <p style={{ margin: "2px 0 0", color: "#94a3b8" }}>
+        Incidentes: <span style={{ color: "#f8fafc" }}>{total}</span>
+      </p>
+    </div>
+  );
+};
+
 export const CustomBarChart = ({ title, incidents }) => {
   const { byPriority } = useIncidentStats(incidents);
 
@@ -30,22 +53,35 @@ export const CustomBarChart = ({ title, incidents }) => {
     total: value,
     fill: PRIORITY_COLORS[key] ?? "#6b7280",
   }));
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
       {title && (
-        <h2 className="text-center text-sm font-medium mb-2">{title}</h2>
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+          {title}
+        </h2>
       )}
       <ResponsiveContainer width="100%" height={250}>
         <ComposedChart
           data={data}
-          margin={{ top: 20, right: 0, bottom: 0, left: 0 }}
+          margin={{ top: 10, right: 10, bottom: 0, left: -20 }}
         >
-          <CartesianGrid stroke="#f5f5f5" />
-          <XAxis dataKey="name" scale="band" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="total" barSize={20} fill="#413ea0" />
+          <CartesianGrid stroke="#f1f5f9" vertical={false} />
+          <XAxis
+            dataKey="name"
+            scale="band"
+            tick={{ fontSize: 12, fill: "#94a3b8", fontWeight: 500 }}
+            axisLine={false}
+            tickLine={false}
+          />
+          <YAxis
+            tick={{ fontSize: 11, fill: "#cbd5e1" }}
+            axisLine={false}
+            tickLine={false}
+            allowDecimals={false}
+          />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: "#f1f5f9" }} />
+          <Bar dataKey="total" barSize={36} radius={[6, 6, 0, 0]} fill="fill" />
         </ComposedChart>
       </ResponsiveContainer>
     </div>

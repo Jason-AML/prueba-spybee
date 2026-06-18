@@ -8,7 +8,7 @@ export const ModalControl = ({ action, children }) => {
   return (
     <>
       <button
-        className="btn lg:flex items-center gap-2 bg-amber-300 px-5 py-2.5 text-xs font-bold uppercase tracking-widest rounded-lg transition-transform hover:scale-105"
+        className="btn max-w-2xs lg:flex text-white items-center gap-2 bg-blue-600 px-5 py-2.5 text-xs font-bold uppercase tracking-widest rounded-lg transition-transform hover:scale-105"
         onClick={() => setOpen(true)}
       >
         {action}
