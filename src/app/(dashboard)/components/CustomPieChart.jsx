@@ -4,8 +4,17 @@ import { Pie, PieChart, Sector, Tooltip, ResponsiveContainer } from "recharts";
 import { useIncidentStats } from "@/app/hooks/useIncidentStats";
 
 const renderActiveShape = ({
-  cx, cy, midAngle, innerRadius, outerRadius,
-  startAngle, endAngle, fill, payload, percent, value,
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  startAngle,
+  endAngle,
+  fill,
+  payload,
+  percent,
+  value,
 }) => {
   const RADIAN = Math.PI / 180;
   const sin = Math.sin(-RADIAN * (midAngle ?? 1));
@@ -21,32 +30,79 @@ const renderActiveShape = ({
   return (
     <g>
       {/* Label central */}
-      <text x={cx} y={cy} dy={-6} textAnchor="middle" fill="#1e293b" fontSize={13} fontWeight={600}>
+      <text
+        x={cx}
+        y={cy}
+        dy={-6}
+        textAnchor="middle"
+        fill="#1e293b"
+        fontSize={13}
+        fontWeight={600}
+      >
         {payload.name}
       </text>
-      <text x={cx} y={cy} dy={14} textAnchor="middle" fill="#94a3b8" fontSize={12}>
+      <text
+        x={cx}
+        y={cy}
+        dy={14}
+        textAnchor="middle"
+        fill="#94a3b8"
+        fontSize={12}
+      >
         {value} incidentes
       </text>
 
       {/* Sector principal */}
-      <Sector cx={cx} cy={cy} innerRadius={innerRadius} outerRadius={outerRadius}
-        startAngle={startAngle} endAngle={endAngle} fill={fill} opacity={0.9} />
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+        opacity={0.9}
+      />
 
       {/* Anillo exterior activo */}
-      <Sector cx={cx} cy={cy} startAngle={startAngle} endAngle={endAngle}
-        innerRadius={(outerRadius ?? 0) + 6} outerRadius={(outerRadius ?? 0) + 10} fill={fill} />
+      <Sector
+        cx={cx}
+        cy={cy}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        innerRadius={(outerRadius ?? 0) + 6}
+        outerRadius={(outerRadius ?? 0) + 10}
+        fill={fill}
+      />
 
       {/* Línea de etiqueta */}
-      <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} strokeWidth={1.5} fill="none" />
+      <path
+        d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
+        stroke={fill}
+        strokeWidth={1.5}
+        fill="none"
+      />
       <circle cx={ex} cy={ey} r={3} fill={fill} stroke="none" />
 
       {/* Textos de etiqueta */}
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor}
-        fill="#1e293b" fontSize={13} fontWeight={600}>
+      <text
+        x={ex + (cos >= 0 ? 1 : -1) * 12}
+        y={ey}
+        textAnchor={textAnchor}
+        fill="#1e293b"
+        fontSize={13}
+        fontWeight={600}
+      >
         {value}
       </text>
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor}
-        fill="#94a3b8" fontSize={11}>
+      <text
+        x={ex + (cos >= 0 ? 1 : -1) * 12}
+        y={ey}
+        dy={18}
+        textAnchor={textAnchor}
+        fill="#94a3b8"
+        fontSize={11}
+      >
         {`${((percent ?? 1) * 100).toFixed(0)}%`}
       </text>
     </g>
@@ -65,7 +121,12 @@ const STATUS_COLORS = {
   on_paused: "#ef4444",
 };
 
-export default function CustomPieChart({ isAnimationActive = true, title, incidents = [], className="" }) {
+export default function CustomPieChart({
+  isAnimationActive = true,
+  title,
+  incidents = [],
+  className = "",
+}) {
   const { byStatus } = useIncidentStats(incidents);
 
   const data = Object.entries(byStatus).map(([key, value]) => ({
@@ -76,7 +137,6 @@ export default function CustomPieChart({ isAnimationActive = true, title, incide
 
   return (
     <div className={` rounded-2xl  shadow-2xl p-5 ${className}`}>
-      
       {title && (
         <h2 className="text-sm font-semibold text-black uppercase tracking-wide mb-4">
           {title}
@@ -97,6 +157,23 @@ export default function CustomPieChart({ isAnimationActive = true, title, incide
           <Tooltip content={() => null} />
         </PieChart>
       </ResponsiveContainer>
+      <ul className="flex flex-col gap-3 flex-1">
+        {data.map((entry) => (
+          <li
+            key={entry.name}
+            className="flex items-center gap-3 cursor-pointer rounded-xl px-3 py-2 transition-colors"
+          >
+            <span
+              className="w-3 h-3 rounded-full shrink-0"
+              style={{ backgroundColor: entry.fill }}
+            />
+            <span className="text-sm text-slate-600">{entry.name}</span>
+            <span className="ml-auto text-sm font-semibold text-slate-800">
+              {entry.total}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

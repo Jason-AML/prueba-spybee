@@ -77,25 +77,27 @@ const KpiDashboard = () => {
             key={card.label}
             className=" rounded-2xl  shadow-2xl p-4 bg-surface/80  backdrop-blur-xl"
           >
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center mb-3"
+           <div className="flex justify-start items-center text-center gap-5">
+             <div
+              className="w-8 h-8 lg:w-12 lg:h-12 rounded-lg flex items-center justify-center mb-3"
               style={{ background: card.iconBg }}
             >
               <span
-                className="material-symbols-outlined"
-                style={{ fontSize: 18, color: card.iconColor }}
+                className="material-symbols-outlined text-18 lg:text-36"
+                style={{  color: card.iconColor }}
               >
                 {card.icon}
               </span>
             </div>
-            <p className="text-xs text-gray-400 mb-1">{card.label}</p>
-            <p className="text-2xl font-medium text-gray-800">
+            <p className="text-xs lg:text-2xl text-gray-400 mb-1">{card.label}</p>
+           </div>
+            <p className="text-xs lg:text-2xl font-medium text-center text-gray-800">
               {card?.[card.key] ?? card.value}
             </p>
             {card.dueDate && (
               <Link
                 href={`/incidents/${sortedIncidents[0]?.id}`}
-                className="rounded-2xl bg-red-400/80  text-center px-2"
+                className="rounded-2xl text-xs lg:text-2xl bg-red-400/80  text-center px-2"
               >
                 Vence: {card.dueDate}
               </Link>
