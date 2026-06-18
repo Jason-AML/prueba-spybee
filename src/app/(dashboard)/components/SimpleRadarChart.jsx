@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import { useIncidentStats } from "@/app/hooks/useIncidentStats";
 
-export default function SimpleRadarChart({ title, incidents = [] }) {
+export default function SimpleRadarChart({ title, incidents = [], className=""}) {
   const { byType } = useIncidentStats(incidents);
 
   const data = Object.entries(byType).map(([key, value]) => ({
@@ -20,7 +20,7 @@ export default function SimpleRadarChart({ title, incidents = [] }) {
 
   if (data.length < 3) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex flex-col items-center justify-center h-70.5">
+      <div className="bg-surface/80  backdrop-blur-xl rounded-2xl  shadow-sm p-4 flex flex-col items-center justify-center h-70.5">
         {title && <h2 className="text-sm font-medium text-gray-500 mb-2">{title}</h2>}
         <p className="text-gray-400 text-sm">Se necesitan al menos 3 tipos de incidente para mostrar este gráfico.</p>
       </div>
@@ -28,9 +28,9 @@ export default function SimpleRadarChart({ title, incidents = [] }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div className={`bg-surface/80  backdrop-blur-xl rounded-2xl  shadow-2xl p-5 ${className}`}>
       {title && (
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+        <h2 className="text-sm font-semibold text-black uppercase tracking-wide mb-4">
           {title}
         </h2>
       )}
