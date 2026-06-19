@@ -13,7 +13,7 @@ const router = useRouter();
         <thead>
           <tr>
             {columns.map((col) => (
-              <th key={col.key} className="px-3 py-2 text-sm">{col.label}</th>
+              <th key={col.key} className="px-3 text-center py-2 text-sm">{col.label}</th>
             ))}
           </tr>
         </thead>
