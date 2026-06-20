@@ -30,7 +30,7 @@ export default function SimpleRadarChart({ title, incidents = [], className=""})
   return (
     <div className={`bg-surface/80  backdrop-blur-xl rounded-2xl  shadow-2xl p-5 ${className}`}>
       {title && (
-        <h2 className="text-sm font-semibold text-black uppercase tracking-wide mb-4">
+        <h2 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">
           {title}
         </h2>
       )}
