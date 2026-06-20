@@ -8,14 +8,14 @@ export const ModalControl = ({ action, children }) => {
   return (
     <>
       <button
-        className="btn max-w-2xs lg:flex text-white items-center gap-2 bg-blue-600 px-5 py-2.5 text-xs font-bold uppercase tracking-widest rounded-lg transition-transform hover:scale-105"
+        className="btn max-w-2xs lg:flex text-white items-center gap-2 bg-blue-600 px-5 py-2.5 text-xs font-bold uppercase tracking-widest border-none rounded-lg transition-transform hover:scale-105"
         onClick={() => setOpen(true)}
       >
         {action}
       </button>
 
       <dialog open={open} className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box max-w-5xl">
+        <div className="modal-box max-w-5xl bg-[#15171B] border-[0.5px] border-[#2A2D32]">
           {children}
           <div className="modal-action">
             <button className="btn" onClick={() => setOpen(false)}>

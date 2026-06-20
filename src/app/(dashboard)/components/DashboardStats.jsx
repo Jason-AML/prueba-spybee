@@ -34,17 +34,17 @@ const DashboardStats = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           <CustomBarChart
             title="Prioridad"
-            className="flex flex-col items-center justify-center bg-surface/80  backdrop-blur-xl lg:col-span-4 "
+            className="flex flex-col items-center justify-center bg-[#15171B] border-[0.5px] border-[#2A2D32]   lg:col-span-4 "
             incidents={filteredIncidents}
           />
           <CustomPieChart
             title="Estado"
-            className="flex flex-col items-center justify-center bg-surface/80  backdrop-blur-xl sm:hidden lg:block lg:col-span-3"
+            className="flex flex-col items-center justify-center bg-[#15171B] border-[0.5px] border-[#2A2D32]   sm:hidden lg:block lg:col-span-3"
             incidents={filteredIncidents}
           />
           <SimpleRadarChart
             title="Tipo"
-            className="flex flex-col items-center justify-center bg-surface/80  backdrop-blur-xl lg:col-span-5"
+            className="flex flex-col items-center justify-center bg-[#15171B] border-[0.5px] border-[#2A2D32]  lg:col-span-5"
             incidents={filteredIncidents}
           />
         </div>

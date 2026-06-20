@@ -1,25 +1,28 @@
 "use client";
 
 import { useNavigation } from "@/app/hooks/useNavigation";
+import { useAuth } from "@/context/AuthContext";
 import { UserMenu } from "./UserMenu";
 import { NavItem } from "./NavItem";
 import Image from "next/image";
+
 export const Nav = () => {
   const { navigationItems, isActive } = useNavigation();
+  const { user } = useAuth();
+
   return (
-    
-      <nav className="sticky top-0 z-50 bg-surface/80  backdrop-blur-xl flex items-center justify-between w-full  mx-auto p-4">
-        <div className="text-headline-md font-headline-md font-semibold text-on-surface">
-          <Image
+    <nav className="sticky top-0 z-50 bg-[#15171B] border-b-[0.5px] border-[#2A2D32] flex items-center justify-between w-full mx-auto p-4">
+      <div>
+        <Image
           src="/logo_spybee.png"
           width={100}
           height={60}
           alt="logo spybee"
-          />
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <div className="hidden md:flex  gap-2">
+        />
+      </div>
+
+      <div className="flex items-center gap-4">
+        <div className="hidden md:flex gap-2">
           {navigationItems.map((item) => (
             <NavItem
               key={item.id}
@@ -31,11 +34,17 @@ export const Nav = () => {
             />
           ))}
         </div>
-          <button className="material-symbols-outlined text-[#4d4636] hover:text-[#765a00] transition-colors">
+        <button
+          type="button"
+          aria-label="Notificaciones"
+          className="text-[#8E9094] hover:text-[#85B7EB] transition-colors"
+        >
+          <span className="material-symbols-outlined" aria-hidden="true">
             notifications
-          </button>
-          <UserMenu userName="Admin" />
-        </div>
-      </nav>
+          </span>
+        </button>
+        <UserMenu userName={user?.email?.split("@")[0] ?? "Usuario"} />
+      </div>
+    </nav>
   );
 };

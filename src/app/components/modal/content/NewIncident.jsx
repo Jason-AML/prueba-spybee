@@ -175,9 +175,9 @@ export default function NewIncident() {
   return (
     <>
       {/* Header */}
-      <div className="flex items-start justify-between px-6 py-5 border-b border-neutral-200 dark:border-neutral-700">
+      <div className="flex text-white items-start justify-between px-6 py-5 border-b border-neutral-200 dark:border-neutral-700">
         <div>
-          <h2 className="text-base font-medium text-neutral-900 dark:text-white">
+          <h2 className="text-base font-medium  ">
             Nueva incidencia
           </h2>
           <p className="text-xs text-neutral-400 mt-0.5">
@@ -363,7 +363,6 @@ export default function NewIncident() {
               placeholder="Descripción del lugar (Ej. Nivel 11 - eje E3)"
               className={`${inputCls} mb-2`}
             />
-            {/* Map placeholder — reemplazar con <Map> de Mapbox */}
             <IncidentMap
               incident={
                 location.lat && location.lng

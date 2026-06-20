@@ -9,7 +9,7 @@ export const Layout = ({ children, pageTitle }) => {
         {/* Header */}
         <Nav title={pageTitle} />
         {/* Contenido principal */}
-        <main className="flex-1 overflow-y-auto p-3 ">
+        <main className="flex-1 overflow-y-auto p-3 bg-[#0B0D10]">
           <div className="mx-auto ">{children}</div>
         </main>
       </div>

@@ -3,21 +3,28 @@
 import { useCallback } from "react";
 
 export const IncidentsFilters = ({ filters, options, onChange }) => {
-  const handleChange = useCallback((field) => (event) => {
-    onChange({
-      ...filters,
-      [field]: event.target.value,
-    });
-  }, [filters, onChange]);
+  const handleChange = useCallback(
+    (field) => (event) => {
+      onChange({
+        ...filters,
+        [field]: event.target.value,
+      });
+    },
+    [filters, onChange],
+  );
+
+  const selectClass =
+    "mt-2 block w-full rounded-lg border-[0.5px] border-[#2A2D32] bg-[#1C1F24] px-3 py-2 text-sm text-[#E8E9EB] focus:border-[#378ADD] focus:outline-none focus:ring-2 focus:ring-[#0C447C]";
+  const labelClass = "text-sm font-medium text-[#8E9094]";
 
   return (
-    <div className="m-6 rounded-lg bg-white p-4 shadow-sm">
+    <div className="m-6 rounded-2xl bg-[#15171B] border-[0.5px] border-[#2A2D32] p-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-5">
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Estado</span>
+            <span className={labelClass}>Estado</span>
             <select
-              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+              className={selectClass}
               value={filters.status}
               onChange={handleChange("status")}
             >
@@ -31,9 +38,9 @@ export const IncidentsFilters = ({ filters, options, onChange }) => {
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Proyecto</span>
+            <span className={labelClass}>Proyecto</span>
             <select
-              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+              className={selectClass}
               value={filters.project}
               onChange={handleChange("project")}
             >
@@ -47,9 +54,9 @@ export const IncidentsFilters = ({ filters, options, onChange }) => {
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Prioridad</span>
+            <span className={labelClass}>Prioridad</span>
             <select
-              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+              className={selectClass}
               value={filters.priority}
               onChange={handleChange("priority")}
             >
@@ -63,9 +70,9 @@ export const IncidentsFilters = ({ filters, options, onChange }) => {
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Responsable</span>
+            <span className={labelClass}>Responsable</span>
             <select
-              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+              className={selectClass}
               value={filters.owner}
               onChange={handleChange("owner")}
             >
@@ -79,9 +86,9 @@ export const IncidentsFilters = ({ filters, options, onChange }) => {
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Fecha</span>
+            <span className={labelClass}>Fecha</span>
             <select
-              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+              className={selectClass}
               value={filters.dateRange}
               onChange={handleChange("dateRange")}
             >
@@ -96,8 +103,16 @@ export const IncidentsFilters = ({ filters, options, onChange }) => {
 
         <button
           type="button"
-          onClick={() => onChange({ status: "", project: "", priority: "", owner: "", dateRange: "" })}
-          className="inline-flex shrink-0 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-amber-400 hover:text-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-200"
+          onClick={() =>
+            onChange({
+              status: "",
+              project: "",
+              priority: "",
+              owner: "",
+              dateRange: "",
+            })
+          }
+          className="inline-flex shrink-0 items-center justify-center rounded-lg border-[0.5px] border-[#2A2D32] bg-[#1C1F24] px-4 py-2 text-sm font-medium text-[#C9CACC] transition hover:border-[#378ADD] hover:text-[#85B7EB] focus:outline-none focus:ring-2 focus:ring-[#0C447C]"
         >
           Limpiar filtros
         </button>

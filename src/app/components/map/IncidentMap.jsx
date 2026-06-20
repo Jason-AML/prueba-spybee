@@ -4,11 +4,13 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { toLatLng } from "@/utils/coordinate";
+
 const priorityColors = {
-  low: "#22c55e",
-  medium: "#eab308",
-  high: "#ef4444",
+  low: "#1D9E75",
+  medium: "#FAC775",
+  high: "#D85A30",
 };
+
 const IncidentMap = ({ incident, incidents, title }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -19,8 +21,9 @@ const IncidentMap = ({ incident, incidents, title }) => {
   useEffect(() => {
     if (!items.length || !mapContainer.current) return;
     const firstCoords = toLatLng(items[0].coordinates);
-    if (isNaN(firstCoords.lat) || isNaN(firstCoords.lng)) return;
-    if (!firstCoords) return;
+    if (!firstCoords || isNaN(firstCoords.lat) || isNaN(firstCoords.lng))
+      return;
+
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
     map.current = new mapboxgl.Map({
@@ -34,7 +37,7 @@ const IncidentMap = ({ incident, incidents, title }) => {
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
         placeholder: "Buscar dirección...",
-        countries: "co", 
+        countries: "co",
         language: "es",
       }),
     );
@@ -42,15 +45,15 @@ const IncidentMap = ({ incident, incidents, title }) => {
       const coords = toLatLng(inc.coordinates);
       if (!coords) return;
 
-      const color = priorityColors[inc.priority?.toLowerCase()] ?? "#6b7280";
+      const color = priorityColors[inc.priority?.toLowerCase()] ?? "#888780";
       const rawUrl = inc.media?.[0]?.url;
       const imgSrc = rawUrl?.startsWith("http") ? rawUrl : null;
 
       const popup = new mapboxgl.Popup().setHTML(`
-    <div style="width:200px">
-      ${imgSrc ? `<div id="img-${inc.id}" style="height:120px; background:#f3f4f6; border-radius:4px; margin-bottom:8px;"></div>` : ""}
-      <strong>${inc.title}</strong>
-      <a href="/incidents/${inc.id}" style="display:block; margin-top:4px; color:#3b82f6;">Ver incidente</a>
+    <div style="width:200px; background:#15171B; color:#E8E9EB; margin:-10px; padding:10px; border-radius:8px;">
+      ${imgSrc ? `<div id="img-${inc.id}" style="height:120px; background:#1C1F24; border-radius:4px; margin-bottom:8px;"></div>` : ""}
+      <strong style="color:#fff;">${inc.title}</strong>
+      <a href="/incidents/${inc.id}" style="display:block; margin-top:4px; color:#85B7EB;">Ver incidente</a>
     </div>
   `);
 
@@ -64,7 +67,7 @@ const IncidentMap = ({ incident, incidents, title }) => {
           img.style.cssText =
             "width:100%; height:120px; object-fit:cover; border-radius:4px;";
           container.replaceWith(img);
-          img.dataset.loaded = "true"; 
+          img.dataset.loaded = "true";
         });
       }
 
@@ -78,10 +81,8 @@ const IncidentMap = ({ incident, incidents, title }) => {
   }, [incident, incidents]);
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 mb-6 mt-5">
-      {title && (
-        <h2 className="text-xl font-bold text-gray-900 mb-4">{title}</h2>
-      )}
+    <div className="bg-[#15171B] border-[0.5px] border-[#2A2D32] rounded-2xl p-6 mb-6 mt-5">
+      {title && <h2 className="text-xl font-bold text-white mb-4">{title}</h2>}
       <div
         ref={mapContainer}
         className="w-full h-120 rounded-lg overflow-hidden mb-4"
@@ -89,14 +90,14 @@ const IncidentMap = ({ incident, incidents, title }) => {
       {items.length === 1 && items[0].coordinates && (
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-gray-500 mb-1">Latitud</p>
-            <p className="font-mono font-semibold text-gray-900">
+            <p className="text-sm text-[#75777B] mb-1">Latitud</p>
+            <p className="font-mono font-semibold text-white">
               {items[0].coordinates.lat}
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500 mb-1">Longitud</p>
-            <p className="font-mono font-semibold text-gray-900">
+            <p className="text-sm text-[#75777B] mb-1">Longitud</p>
+            <p className="font-mono font-semibold text-white">
               {items[0].coordinates.lng}
             </p>
           </div>
